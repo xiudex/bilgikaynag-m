@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bilgi kaynağım | Kurumsal Ağ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="masterBody" class="theme-ocean">
+
+    <div class="background-animation">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+        <div class="blob blob4"></div>
+        <canvas id="themeCanvas"></canvas>
+    </div>
+
+    <header class="glass-header">
+        <div class="header-left">
+            <div class="logo" onclick="location.reload()">bilgi<span>kaynağım</span></div>
+            <div class="theme-selector-box">
+                <div class="theme-dot" style="background:#2c3e50" onclick="setTheme('theme-dark')" title="Mat Gece"></div>
+                <div class="theme-dot" style="background:#1e3a5f" onclick="setTheme('theme-ocean')" title="Okyanus"></div>
+                <div class="theme-dot" style="background:#234f36" onclick="setTheme('theme-forest')" title="Zümrüt"></div>
+                <div class="theme-dot" style="background:#5c3551" onclick="setTheme('theme-sunset')" title="Günbatımı"></div>
+                <div class="theme-dot" style="background:#42266b" onclick="setTheme('theme-cyber')" title="Cyber"></div>
+                <div class="theme-dot" style="background:#4a3f35" onclick="setTheme('theme-coffee')" title="Kahve"></div>
+                <div class="theme-dot" style="background:#522527" onclick="setTheme('theme-cherry')" title="Vişne"></div>
+                <div class="theme-dot" style="background:#403a2c" onclick="setTheme('theme-royal')" title="Kraliyet"></div>
+                <div class="theme-dot" style="background:#427b8a" onclick="setTheme('theme-ice')" title="Buz"></div>
+                <div class="theme-dot" style="background:#2d4033" onclick="setTheme('theme-sage')" title="Adaçayı"></div>
+                <div class="theme-dot" style="background:#382f45" onclick="setTheme('theme-lavender')" title="Lavanta"></div>
+                <div class="theme-dot" style="background:#1e3531" onclick="setTheme('theme-mint')" title="Nane"></div>
+                <div class="theme-dot" style="background:#454138" onclick="setTheme('theme-sand')" title="Kum"></div>
+                <div class="theme-dot" style="background:#2d3442" onclick="setTheme('theme-slate')" title="Arduvaz"></div>
+                <div class="theme-dot" style="background:#452d2f" onclick="setTheme('theme-peach')" title="Şeftali"></div>
+                <div class="theme-dot" style="background:#f0f4f8;border-color:rgba(0,0,0,0.25);" onclick="setTheme('theme-white')" title="Beyaz"></div>
+                <div class="theme-dot" style="background:#111111" onclick="setTheme('theme-black')" title="Siyah"></div>
+                <div class="theme-dot" style="background:conic-gradient(#7c3aed,#db2777,#3b82f6,#9333ea,#7c3aed);border-color:rgba(255,255,255,0.4);" onclick="setTheme('theme-glass')" title="✦ Karışık Cam"></div>
+            </div>
+            <div class="pause-box">
+                <button id="playPauseBtn" onclick="toggleBackgroundAnimation()" class="btn-anim-toggle" title="Animasyonu Durdur/Oynat">⏸️</button>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="nav-pill glass-pill" onclick="checkLoginRequired(() => toggleModal('classModal', true))"><span class="nav-pill-icon">👥</span><span>Sınıfım / Arkadaşlarım</span></div>
+            <div class="nav-pill glass-pill" onclick="checkLoginRequired(() => toggleModal('favModal', true))"><span class="nav-pill-icon">⭐</span><span>Favoriler</span></div>
+            <div class="nav-pill glass-pill" onclick="handleProfileClick()"><span class="nav-pill-icon">👤</span><span>Profil</span></div>
+            <button class="btn-upload-prominent" onclick="checkLoginRequired(() => toggleModal('uploadModal', true))">📤 Not Yükle</button>
+            <button id="loginBtn" class="btn-main btn-login-prominent" onclick="toggleModal('loginModal', true)">Giriş Yap</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar glass-sidebar">
+
+            <div class="nav-group">
+                <div class="nav-header" onclick="openCountdownsView()">⏳ Sınav Sayaçları</div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="openSuggestionsView()">💡 Sınav Önerileri</div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="openLeaderboardView()">🏆 Liderlik Tablosu</div>
+            </div>
+
+            <div class="nav-divider"></div>
+
+            <div class="nav-group">
+                <div class="nav-header active" data-open="1" onclick="toggleSub('yksSub', this)">🎓 YKS (TYT-AYT) <span class="arrow" style="transform:rotate(180deg)">▾</span></div>
+                <div id="yksSub" class="sub-menu open">
+                    <div class="sub-item" onclick="loadCategory('YKS Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Türkçe')">Türkçe / Edebiyat</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Fizik')">Fizik</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Kimya')">Kimya</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Biyoloji')">Biyoloji</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Tarih')">Tarih</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Coğrafya')">Coğrafya</div>
+                    <div class="sub-item" onclick="loadCategory('YKS Felsefe')">Felsefe</div>
+                    <div class="sub-item" onclick="loadCategory('YKS YDT')">YDT (Yabancı Dil)</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('kpssSub', this)">🏛️ KPSS <span class="arrow">▾</span></div>
+                <div id="kpssSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('KPSS Genel Yetenek')">Genel Yetenek</div>
+                    <div class="sub-item" onclick="loadCategory('KPSS Genel Kültür')">Genel Kültür</div>
+                    <div class="sub-item" onclick="loadCategory('KPSS Eğitim Bilimleri')">Eğitim Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('KPSS ÖABT')">ÖABT</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('alesSub', this)">🧠 ALES <span class="arrow">▾</span></div>
+                <div id="alesSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('ALES Sayısal')">Sayısal</div>
+                    <div class="sub-item" onclick="loadCategory('ALES Sözel')">Sözel</div>
+                    <div class="sub-item" onclick="loadCategory('ALES Eşit Ağırlık')">Eşit Ağırlık</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('dgsSub', this)">🔄 DGS <span class="arrow">▾</span></div>
+                <div id="dgsSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('DGS Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('DGS Türkçe')">Türkçe</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('ydsSub', this)">🌍 YDS / YÖKDİL <span class="arrow">▾</span></div>
+                <div id="ydsSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('YDS İngilizce')">İngilizce</div>
+                    <div class="sub-item" onclick="loadCategory('YDS Almanca')">Almanca</div>
+                    <div class="sub-item" onclick="loadCategory('YÖKDİL Sağlık')">Sağlık Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('YÖKDİL Sosyal')">Sosyal Bilimler</div>
+                    <div class="sub-item" onclick="loadCategory('YÖKDİL Fen')">Fen Bilimleri</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('tusSub', this)">⚕️ TUS / DUS <span class="arrow">▾</span></div>
+                <div id="tusSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('TUS Temel Bilimler')">Temel Bilimler</div>
+                    <div class="sub-item" onclick="loadCategory('TUS Klinik Bilimler')">Klinik Bilimler</div>
+                    <div class="sub-item" onclick="loadCategory('DUS Diş Hekimliği')">Diş Hekimliği</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('hukukSub', this)">⚖️ HAKİMLİK <span class="arrow">▾</span></div>
+                <div id="hukukSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('Hakimlik Adli Yargı')">Adli Yargı</div>
+                    <div class="sub-item" onclick="loadCategory('Hakimlik İdari Yargı')">İdari Yargı</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('msuSub', this)">🛡️ MSÜ <span class="arrow">▾</span></div>
+                <div id="msuSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('MSÜ Sayısal')">Sayısal</div>
+                    <div class="sub-item" onclick="loadCategory('MSÜ Eşit Ağırlık')">Eşit Ağırlık</div>
+                    <div class="sub-item" onclick="loadCategory('MSÜ Sözel')">Sözel</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('digerSub', this)">📌 DİĞER SINAVLAR <span class="arrow">▾</span></div>
+                <div id="digerSub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('EKPSS')">EKPSS</div>
+                    <div class="sub-item" onclick="loadCategory('YÖS')">YÖS</div>
+                    <div class="sub-item" onclick="loadCategory('İSG')">İSG (İş Güvenliği)</div>
+                    <div class="sub-item" onclick="loadCategory('GYS')">GYS (Görevde Yükselme)</div>
+                </div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-label">LİSE MÜFREDATI</div>
+
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('lise12Sub', this)">🎓 12. Sınıf <span class="arrow">▾</span></div>
+                <div id="lise12Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Edebiyat')">Türk Dili ve Edebiyatı</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Fizik')">Fizik</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Kimya')">Kimya</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Biyoloji')">Biyoloji</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf İnkılap')">T.C. İnkılap Tarihi</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf İngilizce')">İngilizce</div>
+                    <div class="sub-item" onclick="loadCategory('12. Sınıf Din Kültürü')">Din Kültürü</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('lise11Sub', this)">📚 11. Sınıf <span class="arrow">▾</span></div>
+                <div id="lise11Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Edebiyat')">Türk Dili ve Edebiyatı</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Fizik')">Fizik</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Kimya')">Kimya</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Biyoloji')">Biyoloji</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Tarih')">Tarih</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Coğrafya')">Coğrafya</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf Felsefe')">Felsefe</div>
+                    <div class="sub-item" onclick="loadCategory('11. Sınıf İngilizce')">İngilizce</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('lise10Sub', this)">📘 10. Sınıf <span class="arrow">▾</span></div>
+                <div id="lise10Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Edebiyat')">Türk Dili ve Edebiyatı</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Fizik')">Fizik</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Kimya')">Kimya</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Biyoloji')">Biyoloji</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Tarih')">Tarih</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Coğrafya')">Coğrafya</div>
+                    <div class="sub-item" onclick="loadCategory('10. Sınıf Felsefe')">Felsefe</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('lise9Sub', this)">📗 9. Sınıf <span class="arrow">▾</span></div>
+                <div id="lise9Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Edebiyat')">Türk Dili ve Edebiyatı</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Fizik')">Fizik</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Kimya')">Kimya</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Biyoloji')">Biyoloji</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Tarih')">Tarih</div>
+                    <div class="sub-item" onclick="loadCategory('9. Sınıf Coğrafya')">Coğrafya</div>
+                </div>
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-label">ORTAOKUL MÜFREDATI</div>
+
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('orta8Sub', this)">🏫 8. Sınıf (LGS) <span class="arrow">▾</span></div>
+                <div id="orta8Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf Türkçe')">Türkçe</div>
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf Fen Bilimleri')">Fen Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf İnkılap')">T.C. İnkılap Tarihi</div>
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf İngilizce')">İngilizce</div>
+                    <div class="sub-item" onclick="loadCategory('8. Sınıf Din Kültürü')">Din Kültürü</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('orta7Sub', this)">🎒 7. Sınıf <span class="arrow">▾</span></div>
+                <div id="orta7Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('7. Sınıf Türkçe')">Türkçe</div>
+                    <div class="sub-item" onclick="loadCategory('7. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('7. Sınıf Fen Bilimleri')">Fen Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('7. Sınıf Sosyal Bilgiler')">Sosyal Bilgiler</div>
+                    <div class="sub-item" onclick="loadCategory('7. Sınıf İngilizce')">İngilizce</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('orta6Sub', this)">🎒 6. Sınıf <span class="arrow">▾</span></div>
+                <div id="orta6Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('6. Sınıf Türkçe')">Türkçe</div>
+                    <div class="sub-item" onclick="loadCategory('6. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('6. Sınıf Fen Bilimleri')">Fen Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('6. Sınıf Sosyal Bilgiler')">Sosyal Bilgiler</div>
+                </div>
+            </div>
+            <div class="nav-group">
+                <div class="nav-header" onclick="toggleSub('orta5Sub', this)">🎒 5. Sınıf <span class="arrow">▾</span></div>
+                <div id="orta5Sub" class="sub-menu">
+                    <div class="sub-item" onclick="loadCategory('5. Sınıf Türkçe')">Türkçe</div>
+                    <div class="sub-item" onclick="loadCategory('5. Sınıf Matematik')">Matematik</div>
+                    <div class="sub-item" onclick="loadCategory('5. Sınıf Fen Bilimleri')">Fen Bilimleri</div>
+                    <div class="sub-item" onclick="loadCategory('5. Sınıf Sosyal Bilgiler')">Sosyal Bilgiler</div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main-content">
+
+            <div id="welcomeHero" class="welcome-hero glass-card">
+                <span class="close-hero" onclick="closeHero()">✖</span>
+                <h1>Sisteme Hoş Geldiniz.</h1>
+                <p>Güvenli ve denetimli bilgi ağındasınız. Kurallara aykırı içerikler sistem tarafından denetlenmektedir.</p>
+            </div>
+
+            <!-- SEARCH + FILTER -->
+            <div class="search-filter-bar glass-card" id="searchFilterBar">
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="globalSearchInput" class="search-input" placeholder="İstediğiniz konuyu anında bulun..." oninput="onSearchInput(this.value)">
+                    <span class="search-clear" id="searchClear" onclick="clearSearch()">✕</span>
+                </div>
+                <button class="filter-toggle-btn glass-pill" onclick="toggleFilterPanel()" id="filterToggleBtn">
+                    <span>⚡ Filtrele</span>
+                    <span class="filter-badge" id="filterBadge"></span>
+                </button>
+            </div>
+            <div id="filterPanel" class="filter-panel glass-card">
+                <div id="filterChips"></div>
+            </div>
+
+            <!-- VIEWS -->
+            <div id="vitrin" class="view active">
+                <div class="category-header">
+                    <h1 id="catTitle" style="color:var(--accent);">Öne Çıkan Notlar</h1>
+                </div>
+                <div class="grid" id="mainGrid"></div>
+            </div>
+
+            <div id="countdownsView" class="view">
+                <div class="category-header"><h1 style="color:var(--accent);">⏳ Sınav Sayaçları</h1></div>
+                <div class="grid" id="countdownsGrid"></div>
+            </div>
+
+            <div id="suggestionsView" class="view">
+                <div class="category-header-flex">
+                    <h1 style="color:var(--accent);">💡 Sınav Önerileri</h1>
+                    <button class="btn-main btn-glass-upload" onclick="checkLoginRequired(() => toggleModal('addSuggestionModal', true))">+ Öneri Ekle</button>
+                </div>
+                <div class="grid" id="suggestionsGrid"></div>
+            </div>
+
+            <div id="leaderboardView" class="view">
+                <div class="category-header"><h1 style="color:var(--accent);">🏆 Liderlik Tablosu</h1></div>
+                <div id="leaderboardContainer"></div>
+            </div>
+
+            <div id="notDetay" class="not-detay view">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+                    <button onclick="goHome()" class="btn-back">← Geri Dön</button>
+                    <button onclick="checkLoginRequired(() => toggleModal('reportModal', true))" class="btn-danger">🚩 Rapor Et</button>
+                </div>
+                <div class="reading-area glass-card">
+                    <h1 id="readTitle" style="color:var(--accent);"></h1>
+                    <div id="readUser" style="margin-top:10px;display:flex;align-items:center;gap:10px;"></div>
+                    <div id="readStats" style="font-size:12px;opacity:0.7;margin-top:10px;"></div>
+                    <div style="margin-top:28px;" id="readContent"></div>
+                </div>
+                <div class="action-bar glass-card">
+                    <button class="btn-action" onclick="checkLoginRequired(readInSite)">📖 Oku</button>
+                    <button class="btn-action" onclick="checkLoginRequired(downloadNote)">📥 PDF İndir</button>
+                    <button class="btn-action btn-heart" id="favBtn" onclick="checkLoginRequired(toggleFavorite)">🤍 Favoriye Ekle</button>
+                    <button class="btn-action btn-success" onclick="checkLoginRequired(() => openRecommendModal('up'))">👍 Öner</button>
+                    <button class="btn-action btn-danger" onclick="checkLoginRequired(() => openRecommendModal('down'))">👎 Önerme</button>
+                    <button class="btn-action" onclick="checkLoginRequired(shareToClass)">👥 Grupta Paylaş</button>
+                </div>
+                <div id="commentsSection" class="comments-section glass-card" style="padding:20px;border-radius:16px;margin-top:18px;">
+                    <h3 style="margin-bottom:13px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;">Değerlendirmeler &amp; Yorumlar</h3>
+                    <div id="commentsList"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <button class="btn-fikir" style="bottom:68px;" onclick="checkLoginRequired(() => toggleModal('bugModal', true))">🐛 Hata Bildir</button>
+    <button class="btn-fikir" onclick="checkLoginRequired(() => toggleModal('fikirModal', true))">💡 Fikir İlet</button>
+
+    <!-- BUG REPORT MODAL -->
+    <div class="modal" id="bugModal">
+        <div class="modal-content glass-modal" style="width:480px;">
+            <span class="close-modal" onclick="toggleModal('bugModal', false)">✖</span>
+            <h2 style="color:#ef4444;margin-bottom:6px;">🐛 Hata Bildir</h2>
+            <p style="font-size:12px;opacity:0.55;margin-bottom:18px;">Lütfen hatanın kategorisini seçin ve açıklayın.</p>
+            <select id="bugCategory" class="input-form">
+                <option value="">— Hata Kategorisi Seçin —</option>
+                <option value="calismayanButon">🔘 Çalışmayan buton</option>
+                <option value="kisimBug">🪲 Belirli bir kısımda bug</option>
+                <option value="animasyonYavas">🐢 Yavaş animasyonlar</option>
+                <option value="animasyonHizli">⚡ Hızlı / kesik animasyonlar</option>
+                <option value="gozYorucu">👁️ Göz yorucu detaylar</option>
+                <option value="temaBozuk">🎨 Tema düzgün görünmüyor</option>
+                <option value="yaziOkunmuyor">🔤 Yazı okunmuyor / kontrast düşük</option>
+                <option value="modalAcilmiyor">🪟 Pencere / modal açılmıyor</option>
+                <option value="aramaCalısmiyor">🔍 Arama çalışmıyor</option>
+                <option value="filtreBozuk">⚡ Filtreler çalışmıyor</option>
+                <option value="kenarCubugu">📋 Sol menü sorunu</option>
+                <option value="canvas">🖼️ Arka plan animasyon sorunu</option>
+                <option value="mobilUyum">📱 Mobil / küçük ekran uyumu</option>
+                <option value="performans">🐌 Genel performans / yavaşlık</option>
+                <option value="diger">❓ Diğer</option>
+            </select>
+            <textarea id="bugText" class="input-form" rows="3" placeholder="Hatayı kısaca açıklayın... (Nerede gördünüz, ne oldu?)"></textarea>
+            <button class="btn-main" style="background:rgba(239,68,68,0.18);color:#ef4444;border:1px solid #ef4444;width:100%;padding:11px;" onclick="submitBugReport()">Hata Raporunu Gönder</button>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRM -->
+    <div id="customConfirm" class="custom-confirm-overlay">
+        <div class="custom-confirm-box glass-modal">
+            <div class="confirm-icon" id="confirmIcon">⚠️</div>
+            <h3 id="confirmTitle" style="color:var(--accent);margin-bottom:10px;font-size:17px;"></h3>
+            <p id="confirmMsg" style="opacity:0.72;font-size:14px;margin-bottom:24px;line-height:1.6;"></p>
+            <div id="confirmBtns" style="display:flex;gap:11px;"></div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content glass-modal" style="text-align:center;width:420px;">
+            <span class="close-modal" onclick="toggleModal('loginModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:10px;">Sisteme Giriş</h2>
+            <p style="opacity:0.55;font-size:12px;margin-bottom:24px;">Devam etmek için bir hesap ile giriş yapınız.</p>
+            <button class="btn-social google" onclick="promptName('google')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google ile Devam Et
+            </button>
+            <button class="btn-social apple" onclick="promptName('apple')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Apple ile Devam Et
+            </button>
+        </div>
+    </div>
+
+    <!-- NAME MODAL -->
+    <div class="modal" id="nameModal">
+        <div class="modal-content glass-modal" style="position:relative;">
+            <span class="close-modal" onclick="toggleModal('nameModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">Kayıt Bilgileri</h2>
+            <p style="font-size:12px;opacity:0.65;margin-bottom:14px;">Adınızı giriniz. İsim değiştirme hakkı 3 ayda bir kez tanımlanmaktadır.</p>
+            <input type="hidden" id="loginProvider">
+            <input type="text" id="userNameInput" class="input-form" placeholder="Adınız Soyadınız">
+            <button class="btn-main btn-glass-upload" style="width:100%;" onclick="finalizeLogin()">Onayla ve Devam Et</button>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content glass-modal" style="width:500px;max-height:90vh;overflow-y:auto;">
+            <span class="close-modal" onclick="toggleModal('profileModal', false)">✖</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+                <div style="display:flex;align-items:center;gap:18px;">
+                    <div class="lvl-circular" id="profLvlCircle" style="width:78px;height:78px;">
+                        <div class="lvl-inner" id="profLvlText" style="width:66px;height:66px;font-size:21px;">1</div>
+                    </div>
+                    <div>
+                        <h2 style="color:var(--accent);margin-bottom:4px;" id="profNameBig">Kullanıcı</h2>
+                        <div style="font-size:11px;opacity:0.65;letter-spacing:1px;" id="profIdDisplay">ID: USR-0000</div>
+                        <div style="font-size:10px;opacity:0.48;margin-top:3px;" id="profProviderDisplay"></div>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;">
+                    <button class="btn-action" style="font-size:11px;padding:6px 12px;" onclick="changeUsername()">Kullanıcı Adı Değiştir</button>
+                    <span style="font-size:9px;opacity:0.45;margin-top:4px;">(3 Ayda 1 Kez)</span>
+                </div>
+            </div>
+            <div class="xp-bar-wrap" style="margin-bottom:18px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;opacity:0.55;margin-bottom:5px;">
+                    <span id="xpLabel">XP Barı</span><span id="xpCount">0 / 10 XP</span>
+                </div>
+                <div class="xp-bar-track"><div class="xp-bar-fill" id="xpBarFill" style="width:0%;"></div></div>
+            </div>
+            <div id="badgesRow" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:22px;">
+                <div class="glass-card" style="padding:14px;border-radius:12px;text-align:center;">
+                    <div style="font-size:21px;font-weight:bold;color:var(--accent);" id="profLikes">0</div>
+                    <div style="font-size:11px;opacity:0.65;">Beğeni</div>
+                </div>
+                <div class="glass-card" style="padding:14px;border-radius:12px;text-align:center;">
+                    <div style="font-size:21px;font-weight:bold;color:var(--accent);" id="profComments">0</div>
+                    <div style="font-size:11px;opacity:0.65;">Değerlendirme</div>
+                </div>
+                <div class="glass-card" style="padding:14px;border-radius:12px;text-align:center;">
+                    <div style="font-size:21px;font-weight:bold;color:var(--gold);" id="profFavs">0</div>
+                    <div style="font-size:11px;opacity:0.65;">Favoriler</div>
+                </div>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,0.08);margin-bottom:13px;"></div>
+            <h3 style="margin-bottom:13px;font-size:14px;color:var(--accent);">Yorumlarım / Değerlendirmelerim</h3>
+            <div id="profCommentsList" style="font-size:12px;opacity:0.75;max-height:140px;overflow-y:auto;padding-right:8px;">Henüz bir değerlendirme yapmadınız.</div>
+        </div>
+    </div>
+
+    <!-- UPLOAD MODAL -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content glass-modal">
+            <span class="close-modal" onclick="toggleModal('uploadModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">Yeni Not Yükle</h2>
+            <input type="text" id="upTitle" class="input-form" placeholder="Ana Başlık">
+            <textarea id="upDesc" class="input-form" rows="3" placeholder="Not İçeriği"></textarea>
+            <select id="upCategory" class="input-form"></select>
+            <button class="btn-main btn-glass-upload" style="width:100%;" onclick="submitNote()">Sisteme Yükle</button>
+        </div>
+    </div>
+
+    <!-- ADD SUGGESTION MODAL -->
+    <div class="modal" id="addSuggestionModal">
+        <div class="modal-content glass-modal">
+            <span class="close-modal" onclick="toggleModal('addSuggestionModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">Yeni Sınav Önerisi</h2>
+            <textarea id="suggText" class="input-form" rows="3" placeholder="Çalışma taktiğinizi buraya yazın..."></textarea>
+            <button class="btn-main btn-glass-upload" style="width:100%;" onclick="submitNewSuggestion()">Sisteme Ekle</button>
+        </div>
+    </div>
+
+    <!-- REPORT MODAL -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content glass-modal">
+            <span class="close-modal" onclick="toggleModal('reportModal', false)">✖</span>
+            <h2 style="color:#ef4444;margin-bottom:18px;">🚩 Rapor İşlemi</h2>
+            <select id="reportReason" class="input-form">
+                <option value="kufur">İhlal / Küfür</option>
+                <option value="ilgisiz">İlgisiz İçerik</option>
+            </select>
+            <button class="btn-main" style="background:rgba(239,68,68,0.18);color:#ef4444;border:1px solid #ef4444;width:100%" onclick="submitReport()">İşleme Al</button>
+        </div>
+    </div>
+
+    <!-- RECOMMEND MODAL -->
+    <div class="modal" id="recommendModal">
+        <div class="modal-content glass-modal">
+            <span class="close-modal" onclick="toggleModal('recommendModal', false)">✖</span>
+            <h2 id="recModalTitle" style="color:var(--accent);margin-bottom:18px;">Değerlendirme</h2>
+            <input type="hidden" id="recType">
+            <select id="recSelect" class="input-form"></select>
+            <button class="btn-main btn-glass-upload" style="width:100%" onclick="submitRecommend()">Gönder</button>
+        </div>
+    </div>
+
+    <!-- FİKİR MODAL -->
+    <div class="modal" id="fikirModal">
+        <div class="modal-content glass-modal">
+            <span class="close-modal" onclick="toggleModal('fikirModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">💡 Fikir İlet</h2>
+            <textarea class="input-form" rows="4" placeholder="Önerileriniz merkez birimine iletilecektir..."></textarea>
+            <button class="btn-main btn-glass-upload" style="width:100%" onclick="submitFikir()">Merkeze Gönder</button>
+        </div>
+    </div>
+
+    <!-- AFK MODAL -->
+    <div class="modal" id="afkModal">
+        <div class="modal-content glass-modal" style="text-align:center;">
+            <h2 style="color:var(--accent);margin-bottom:18px;" id="afkText">Orada mısın?</h2>
+            <p style="opacity:0.75;">Oturumunuz uzun süredir hareketsiz.</p>
+            <button class="btn-main btn-glass-upload" style="margin-top:18px;width:100%;" onclick="toggleModal('afkModal', false)">Buradayım</button>
+        </div>
+    </div>
+
+    <!-- CLASS SYSTEM MODAL -->
+    <div class="modal class-system" id="classModal">
+        <!-- NO GROUP -->
+        <div class="class-container glass-modal" id="classContainerNoGroup" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:38px;position:relative;">
+            <span class="close-modal" onclick="toggleModal('classModal', false)" style="position:absolute;top:18px;right:22px;">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">Sınıfım / Arkadaşlarım</h2>
+            <p style="opacity:0.75;margin-bottom:26px;">Henüz bir gruba üye değilsiniz.</p>
+            <div style="display:flex;gap:13px;margin-bottom:26px;">
+                <button class="btn-main btn-glass-upload" style="padding:13px 26px;font-size:15px;" onclick="showCreateGroupPanel()">+ Yeni Grup Oluştur</button>
+            </div>
+            <div id="createGroupPanel" class="create-group-panel">
+                <h3 style="color:var(--accent);margin-bottom:13px;">Grup Oluştur</h3>
+                <input type="text" id="newGroupName" class="input-form" placeholder="Grup Adı">
+                <textarea id="newGroupDesc" class="input-form" rows="2" placeholder="Grup Açıklaması (isteğe bağlı)"></textarea>
+                <div style="display:flex;gap:9px;">
+                    <button class="btn-main btn-glass-upload" style="flex:1;" onclick="confirmCreateGroup()">Oluştur</button>
+                    <button class="btn-main" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.18);" onclick="hideCreateGroupPanel()">İptal</button>
+                </div>
+            </div>
+            <div style="width:100%;max-width:800px;border-top:1px solid rgba(255,255,255,0.09);padding-top:18px;">
+                <h3 style="margin-bottom:13px;text-align:center;">Mevcut Gruplara Katıl</h3>
+                <div id="dummyGroupsList" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;max-height:290px;overflow-y:auto;padding:8px;"></div>
+            </div>
+        </div>
+
+        <!-- JOIN PANEL -->
+        <div id="joinGroupPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(22px);z-index:1100;align-items:center;justify-content:center;">
+            <div class="glass-modal" style="width:440px;padding:32px;border-radius:22px;position:relative;">
+                <span onclick="hideJoinGroupPanel()" style="position:absolute;top:14px;right:18px;cursor:pointer;font-size:19px;opacity:0.45;">✖</span>
+                <h2 style="color:var(--accent);margin-bottom:5px;" id="joinGroupTitle">Gruba Katıl</h2>
+                <p style="font-size:12px;opacity:0.55;margin-bottom:18px;" id="joinGroupInfo"></p>
+                <div class="glass-card" style="padding:14px;border-radius:12px;margin-bottom:18px;" id="joinGroupDetails"></div>
+                <button class="btn-main btn-glass-upload" style="width:100%;padding:13px;font-size:14px;" id="joinGroupConfirmBtn">Gruba Katıl ✓</button>
+            </div>
+        </div>
+
+        <!-- HAS GROUP -->
+        <div class="class-container glass-modal" id="classContainerHasGroup" style="display:none;">
+            <div class="class-header">
+                <h2 id="groupNameTitle">Sınıfım / Grup Yönetimi</h2>
+                <div style="display:flex;gap:9px;align-items:center;">
+                    <button class="btn-main" style="background:rgba(239,68,68,0.13);border:1px solid #ef4444;color:#ef4444;font-size:12px;padding:7px 13px;" onclick="leaveGroup()">🚪 Gruptan Çık</button>
+                    <span class="close-modal" onclick="toggleModal('classModal', false)" style="position:relative;top:0;right:0;">✖</span>
+                </div>
+            </div>
+            <div class="class-body">
+                <div class="class-sidebar glass-card">
+                    <h3 style="margin-bottom:9px;font-size:14px;">Kişiler (<span id="memberCount">10</span>)</h3>
+                    <div id="memberList" style="max-height:175px;overflow-y:auto;padding-right:4px;"></div>
+                    <div style="margin-top:13px;border-top:1px solid rgba(255,255,255,0.08);padding-top:9px;">
+                        <h4 style="font-size:12px;margin-bottom:9px;color:var(--accent);">Gelen Davetler (<span id="inviteCount">0</span>)</h4>
+                        <div id="inviteList" style="max-height:140px;overflow-y:auto;padding-right:4px;"></div>
+                    </div>
+                    <button class="btn-main btn-glass-upload" style="width:100%;margin-top:13px;font-size:12px;" onclick="promptSendInvite()">Yeni Davet Gönder</button>
+                </div>
+                <div class="class-chat">
+                    <div class="chat-tabs">
+                        <button class="chat-tab active" id="tabChat" onclick="switchTab('chat')">💬 Sohbet</button>
+                        <button class="chat-tab" id="tabNotes" onclick="switchTab('notes')">📄 Paylaşılan Notlar</button>
+                        <div class="tab-slider" id="tabSlider"></div>
+                    </div>
+                    <div class="tab-panels-wrap">
+                        <div id="chatPanel" class="tab-panel is-active">
+                            <div class="chat-box" id="chatBox"></div>
+                            <div class="chat-input-area">
+                                <div class="chat-quick-btns" id="chatQuickBtns"></div>
+                                <div style="display:flex;gap:9px;padding:9px 13px;border-top:1px solid rgba(255,255,255,0.05);">
+                                    <input type="text" id="chatInput" placeholder="Hızlı mesaj seçiniz..." readonly>
+                                    <button class="btn-main btn-glass-upload" onclick="sendChatMessage()">Gönder</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="notesPanel" class="tab-panel" style="display:none;">
+                            <div id="classNotesList" style="flex:1;overflow-y:auto;padding:13px;"></div>
+                            <div style="padding:9px 13px;border-top:1px solid rgba(255,255,255,0.05);">
+                                <input type="file" id="groupFileInput" style="display:none;" onchange="handleGroupFileUpload(event)">
+                                <button class="btn-main btn-glass-upload" style="width:100%;font-size:12px;" onclick="triggerGroupUpload()">📎 Kendi Notumu Paylaş</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAVORITES MODAL -->
+    <div class="modal" id="favModal">
+        <div class="modal-content glass-modal" style="width:610px;max-width:95vw;max-height:85vh;overflow-y:auto;">
+            <span class="close-modal" onclick="toggleModal('favModal', false)">✖</span>
+            <h2 style="color:var(--accent);margin-bottom:18px;">⭐ Favorilerim</h2>
+            <div id="favList" class="fav-grid"><p style="opacity:0.55;grid-column:1/-1;">Favori notunuz bulunmamaktadır.</p></div>
+        </div>
+    </div>
+
+    <!-- LOGIN TOAST -->
+    <div id="loginToast" class="login-toast">
+        <span>🔒 Bu işlem için giriş yapmanız gerekmektedir.</span>
+        <button onclick="toggleModal('loginModal', true); hideLoginToast()">Giriş Yap</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
