@@ -16,9 +16,6 @@
 </div>
 <div id="toastEl" class="toast"></div>
 
-<!-- ══════════════════════════════════
-     LANDING PAGE
-══════════════════════════════════ -->
 <div id="landingPage" style="display:flex;flex-direction:column;height:100dvh">
   <header class="land-header glass-hdr">
     <div class="logo">bilgi<span>kaynağım</span></div>
@@ -64,9 +61,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     APP PAGE
-══════════════════════════════════ -->
 <div id="appPage" style="display:none;flex-direction:column;height:100dvh">
 
   <div id="sbOverlay" class="sb-overlay" onclick="closeSidebar()"></div>
@@ -87,10 +81,8 @@
     </div>
   </header>
 
-  <!-- UPDATE PANEL -->
   <div id="updatePanel" class="update-panel glass-modal" style="display:none"></div>
 
-  <!-- PROFILE DROPDOWN -->
   <div class="profile-dd glass-modal" id="profileDd" style="display:none">
     <div class="dd-user">
       <div class="avatar lg" id="ddAvatar">?</div>
@@ -116,7 +108,6 @@
     <button class="dd-item danger" onclick="closeDd();logout()">🚪 Çıkış Yap</button>
   </div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar glass-sidebar" id="sidebar">
     <div class="sb-inner">
       <div class="sb-item active" onclick="goHome();closeSbMobile()">🏠 <span>Profilim</span></div>
@@ -176,7 +167,6 @@
         </div>
       </div>
 
-      <!-- Divider between Diğer and Lise -->
       <div class="sb-sep-soft"></div>
 
       <div class="sg">
@@ -252,18 +242,15 @@
         </div>
       </div>
 
-      <!-- Ortaokul alt çizgi + Üniversite -->
       <div class="sb-sep-soft"></div>
       <div class="sg-hdr sb-coming" onclick="showUniComingSoon()">🎓 Üniversite Notları <span class="sb-soon-tag">Çok Yakında</span></div>
 
     </div>
   </aside>
 
-  <!-- CONTENT -->
   <div class="content-wrap" id="contentWrap">
     <div class="content" id="content">
 
-      <!-- HOME -->
       <div id="vHome" class="view active">
         <div class="welcome-bar" id="welcomeBar" onclick="openModal('profileModal')" style="cursor:pointer" title="Profil bilgileri için tıkla">
           <div class="wb-left">
@@ -276,7 +263,6 @@
         <div class="bento" id="bento"></div>
       </div>
 
-      <!-- NOTES LIST -->
       <div id="vNotes" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="closeNotesView()">✕ Kapat</button>
@@ -287,7 +273,6 @@
         <div class="notes-grid" id="notesGrid"></div>
       </div>
 
-      <!-- NOTE DETAIL -->
       <div id="vDetail" class="view">
         <div class="detail-top">
           <button class="back-btn" onclick="goBackDetail()">← Geri</button>
@@ -316,7 +301,6 @@
         </div>
       </div>
 
-      <!-- EXAM GROUP -->
       <div id="vExamGrp" class="view">
         <div class="eg-top glass-card">
           <button class="back-btn" onclick="closeExamGrp()">✕ Kapat</button>
@@ -328,7 +312,6 @@
         <div class="notes-grid" id="egGrid"></div>
       </div>
 
-      <!-- MY NOTES -->
       <div id="vMyNotes" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -338,7 +321,6 @@
         <div class="notes-grid" id="myNotesGrid"></div>
       </div>
 
-      <!-- CALENDAR -->
       <div id="vCalendar" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -353,7 +335,6 @@
         <div id="calGrid" class="cal-grid" style="display:none"></div>
       </div>
 
-      <!-- COUNTDOWNS -->
       <div id="vCd" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -368,7 +349,6 @@
         <div class="notes-grid" id="cdGrid" style="display:none"></div>
       </div>
 
-      <!-- SUGGESTIONS -->
       <div id="vSugg" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -378,7 +358,6 @@
         <div class="notes-grid" id="suggGrid"></div>
       </div>
 
-      <!-- LEADERBOARD -->
       <div id="vLb" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -387,7 +366,6 @@
         <div id="lbContainer"></div>
       </div>
 
-      <!-- WIZARD -->
       <div id="vWizard" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -400,7 +378,6 @@
         <div id="wizardBox" class="wizard-box"></div>
       </div>
 
-      <!-- RECENT -->
       <div id="vRecent" class="view">
         <div class="view-hdr">
           <button class="back-btn" onclick="goHome()">← Geri</button>
@@ -412,13 +389,11 @@
     </div>
   </div>
 
-  <!-- FABs -->
   <div class="fabs">
     <button class="fab" onclick="openModal('bugModal')" title="Hata Bildir">🐛</button>
     <button class="fab" onclick="openModal('fikirModal')" title="Fikir İlet">💡</button>
   </div>
 
-  <!-- GROUP DRAWER (full screen overlay) -->
   <div id="groupDrawer" class="group-drawer" style="display:none">
     <div class="group-drawer-inner glass-modal">
       <div class="group-hdr">
@@ -474,11 +449,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     MODALS
-══════════════════════════════════ -->
-
-<!-- LOGIN -->
 <div class="modal" id="loginModal">
   <div class="modal-box glass-modal login-box">
     <button class="modal-x" onclick="closeModal('loginModal')">✕</button>
@@ -509,7 +479,6 @@
   </div>
 </div>
 
-<!-- NAME -->
 <div class="modal" id="nameModal">
   <div class="modal-box glass-modal" style="max-width:400px">
     <button class="modal-x" onclick="closeModal('nameModal')">✕</button>
@@ -520,7 +489,6 @@
   </div>
 </div>
 
-<!-- CHANGE USERNAME MODAL -->
 <div class="modal" id="changeNameModal">
   <div class="modal-box glass-modal" style="max-width:400px">
     <button class="modal-x" onclick="closeModal('changeNameModal')">✕</button>
@@ -534,7 +502,6 @@
   </div>
 </div>
 
-<!-- READ -->
 <div class="modal" id="readModal">
   <div class="modal-box glass-modal" style="max-width:720px;max-height:90vh;overflow-y:auto">
     <button class="modal-x" onclick="closeModal('readModal')">✕</button>
@@ -546,7 +513,6 @@
   </div>
 </div>
 
-<!-- FULL PAGE READ -->
 <div id="fullReadPage" style="display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;background:var(--bg);padding:32px clamp(14px,6vw,80px)">
   <div style="max-width:800px;margin:0 auto">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
@@ -557,7 +523,6 @@
   </div>
 </div>
 
-<!-- PROFILE -->
 <div class="modal" id="profileModal">
   <div class="modal-box glass-modal" style="max-width:480px;max-height:92vh;overflow-y:auto">
     <div class="prof-modal-hdr">
@@ -586,7 +551,6 @@
       <button class="btn-primary" style="margin:0" onclick="closeModal('profileModal');openMyNotes()">📝 Notlarım</button>
       <button class="btn-primary" style="margin:0" onclick="closeModal('profileModal');openModal('classModal')">👥 Grubum</button>
     </div>
-    <!-- Bugün Ne Yapayım? adımlı wizard (profil içi) -->
     <div class="tw-section glass-card">
       <div class="tw-section-hdr">
         <span style="font-size:16px">🎯</span>
@@ -594,7 +558,6 @@
       </div>
       <div id="twBox" class="tw-box"></div>
     </div>
-    <!-- Yaptıklarım -->
     <div class="tw-section glass-card" style="margin-top:10px">
       <div class="tw-section-hdr">
         <span style="font-size:16px">📋</span>
@@ -606,7 +569,6 @@
     <div id="profFavList" style="max-height:110px;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px"></div>
     <h3 style="font-size:13px;color:var(--accent);margin:0 0 8px">Değerlendirmelerim</h3>
     <div id="profComList" style="font-size:12px;opacity:.6;max-height:100px;overflow-y:auto;margin-bottom:16px"></div>
-    <!-- XP Bar at bottom -->
     <div class="prof-bottom-xp glass-card">
       <div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px">Seviye İlerlemesi</div>
       <div class="xp-row" style="margin-bottom:5px"><span id="xpLbl2">Seviye 1</span><span id="xpCnt2">0 / 10 XP</span></div>
@@ -615,7 +577,6 @@
   </div>
 </div>
 
-<!-- ADD NOTE (bigger) -->
 <div class="modal" id="addNoteModal">
   <div class="modal-box glass-modal" style="max-width:560px;max-height:92vh;overflow-y:auto">
     <button class="modal-x" onclick="closeModal('addNoteModal')">✕</button>
@@ -635,7 +596,6 @@
   </div>
 </div>
 
-<!-- EDIT NOTE MODAL -->
 <div class="modal" id="editNoteModal">
   <div class="modal-box glass-modal" style="max-width:560px;max-height:92vh;overflow-y:auto">
     <button class="modal-x" onclick="closeModal('editNoteModal')">✕</button>
@@ -659,7 +619,6 @@
   </div>
 </div>
 
-<!-- CAL ENTRY -->
 <div class="modal" id="calModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('calModal')">✕</button>
@@ -683,7 +642,6 @@
   </div>
 </div>
 
-<!-- UPLOAD -->
 <div class="modal" id="uploadModal">
   <div class="modal-box glass-modal" style="max-width:520px;padding:32px">
     <button class="modal-x" onclick="closeModal('uploadModal')">✕</button>
@@ -699,7 +657,6 @@
   </div>
 </div>
 
-<!-- COUNTDOWN -->
 <div class="modal" id="cdModal">
   <div class="modal-box glass-modal" style="max-width:580px">
     <button class="modal-x" onclick="closeModal('cdModal')">✕</button>
@@ -723,7 +680,6 @@
   </div>
 </div>
 
-<!-- ADD SUGGESTION -->
 <div class="modal" id="suggModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('suggModal')">✕</button>
@@ -733,7 +689,6 @@
   </div>
 </div>
 
-<!-- REPORT -->
 <div class="modal" id="reportModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('reportModal')">✕</button>
@@ -751,7 +706,6 @@
   </div>
 </div>
 
-<!-- RECOMMEND -->
 <div class="modal" id="recModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('recModal')">✕</button>
@@ -762,7 +716,6 @@
   </div>
 </div>
 
-<!-- BUG -->
 <div class="modal" id="bugModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('bugModal')">✕</button>
@@ -782,7 +735,6 @@
   </div>
 </div>
 
-<!-- FİKİR -->
 <div class="modal" id="fikirModal">
   <div class="modal-box glass-modal">
     <button class="modal-x" onclick="closeModal('fikirModal')">✕</button>
@@ -792,7 +744,6 @@
   </div>
 </div>
 
-<!-- CONFIRM -->
 <div id="confirmOverlay" class="overlay">
   <div class="confirm-box glass-modal">
     <div id="confirmIcon" class="confirm-icon">⚠️</div>
@@ -802,15 +753,12 @@
   </div>
 </div>
 
-<!-- CLASS MODAL -->
 <div class="modal" id="classModal">
   <div class="class-wrap">
-    <!-- NO GROUP -->
     <div class="modal-box glass-modal" id="noGroup" style="max-width:720px;max-height:90vh;overflow-y:auto">
       <button class="modal-x" onclick="closeModal('classModal')">✕</button>
       <h2 class="modal-title" style="text-align:center">👥 Sınıfım / Arkadaşlarım</h2>
       <p class="modal-sub" style="text-align:center">Henüz bir gruba üye değilsiniz.</p>
-      <!-- Sadece grup listesi + oluştur butonu görünür -->
       <div id="groupJoinSection">
         <div style="text-align:center;margin-bottom:18px">
           <button class="btn-primary" style="width:auto;padding:11px 26px" onclick="showCreateGroup()">+ Yeni Grup Oluştur</button>
@@ -827,9 +775,7 @@
       </div>
         <h3 style="margin-bottom:12px">Mevcut Gruplara Katıl</h3>
         <div id="groupList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:11px;max-height:260px;overflow-y:auto;padding:4px"></div>
-      </div><!-- /groupJoinSection -->
-      <!-- Grup oluşturma formu — sadece bu görünür, liste gizlenir -->
-      <div id="createGroupBox" style="display:none;max-width:480px;margin:0 auto">
+      </div><div id="createGroupBox" style="display:none;max-width:480px;margin:0 auto">
         <h3 style="color:var(--acc);margin-bottom:14px;font-size:15px">✨ Yeni Grup Oluştur</h3>
         <input type="text" id="gName" class="inp" placeholder="Grup Adı *">
         <textarea id="gDesc" class="inp" rows="3" placeholder="Açıklama * (en az 20 karakter)"></textarea>
@@ -847,7 +793,6 @@
       </div>
     </div>
 
-    <!-- HAS GROUP (shown inside class modal only if no drawer) -->
     <div class="modal-box glass-modal" id="hasGroup" style="display:none;max-width:1000px;height:88vh;overflow:hidden;padding:0">
       <div class="group-hdr">
         <div>
@@ -902,7 +847,6 @@
   </div>
 </div>
 
-<!-- JOIN PANEL (overlay) -->
 <div id="joinPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);z-index:1100;align-items:center;justify-content:center;padding:18px">
   <div class="modal-box glass-modal" style="max-width:480px;position:relative">
     <button onclick="closeJoin()" style="position:absolute;top:12px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;opacity:.4;color:var(--txt)">✕</button>
@@ -916,10 +860,8 @@
   </div>
 </div>
 
-<!-- MEMBER CARD -->
 <div id="memberCard" class="member-card glass-modal" style="display:none"></div>
 
-<!-- UNI COMING SOON OVERLAY -->
 <div id="uniOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:800;align-items:center;justify-content:center;padding:24px">
   <div class="glass-modal" style="max-width:420px;width:100%;padding:36px;border-radius:24px;text-align:center;position:relative;animation:bxIn .4s var(--ease2)">
     <button onclick="closeUniOverlay()" style="position:absolute;top:14px;right:18px;background:none;border:none;cursor:pointer;font-size:17px;opacity:.38;color:var(--txt)">✕</button>
@@ -931,7 +873,6 @@
   </div>
 </div>
 
-<!-- EMAIL LOGIN MODAL -->
 <div class="modal" id="emailLoginModal">
   <div class="modal-box glass-modal" style="max-width:400px">
     <button class="modal-x" onclick="closeModal('emailLoginModal')">✕</button>
@@ -952,7 +893,6 @@
   </div>
 </div>
 
-<!-- INVITE MODAL -->
 <div class="modal" id="inviteModal">
   <div class="modal-box glass-modal" style="max-width:400px">
     <button class="modal-x" onclick="closeModal('inviteModal')">✕</button>
@@ -966,7 +906,6 @@
   </div>
 </div>
 
-<!-- WHY MSG OVERLAY -->
 <div id="whyMsgOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:2100;align-items:center;justify-content:center;padding:24px">
   <div class="glass-modal" style="max-width:400px;width:100%;padding:28px;border-radius:20px;text-align:center;position:relative;animation:bxIn .35s var(--ease2)">
     <button onclick="closeWhyMsg()" style="position:absolute;top:12px;right:14px;background:none;border:none;cursor:pointer;font-size:16px;opacity:.36;color:var(--txt)">✕</button>
@@ -978,11 +917,24 @@
   </div>
 </div>
 
-<!-- Firebase v10 CDN (compat mode - works without bundler) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="firebase.js"></script>
+<script>
+  function loginWithGoogle() { promptName('google'); }
+  function loginWithEmailModal() { promptName('email'); }
+  function submitEmailLogin() { promptName('email'); }
+  function submitEmailRegister() { promptName('email'); }
+  window.firebaseLogout = function() {};
+  window.saveUserToFirestore = function(data) {};
+  window.uploadNoteToFirestore = async function(data) {};
+  document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => { if (typeof S !== 'undefined' && S.user && S.user.isLoggedIn) enterApp(); }, 200);
+      window.finalizeLogin = function() {
+          const nm = document.getElementById('nameInput').value.trim();
+          if(!nm) { document.getElementById('nameInput').focus(); return; }
+          document.getElementById('nameInput').value = '';
+          onUserReady({ uid: 'USR-' + Math.floor(Math.random() * 90000 + 10000), name: nm, provider: document.getElementById('loginProv').value || 'google' });
+      };
+  });
+</script>
 <script src="script.js"></script>
 </body>
 </html>
