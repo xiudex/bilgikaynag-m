@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>bilgi kaynağım</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="masterBody" class="theme-dark">
+
+<div class="bg-layer">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="blob b4"></div><div class="blob b5"></div><div class="blob b6"></div>
+  <div class="blob b7"></div><div class="blob b8"></div><div class="blob b9"></div>
+  <canvas id="themeCanvas"></canvas>
+</div>
+<div id="toastEl" class="toast"></div>
+
+<!-- ══════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════ -->
+<div id="landingPage" style="display:flex;flex-direction:column;height:100dvh">
+  <header class="land-header glass-hdr">
+    <div class="logo">bilgi<span>kaynağım</span></div>
+    <button class="btn-primary sm" onclick="openModal('loginModal')">Giriş Yap</button>
+  </header>
+
+  <div class="land-body" id="landBody">
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge anim-up" style="--d:.05s">📚 Türkiye'nin Not Platformu</div>
+        <h1 class="hero-title anim-up" style="--d:.15s">Çalışmanı bir<br><span class="accent">üst seviyeye</span><br>taşı.</h1>
+        <p class="hero-sub anim-up" style="--d:.28s">Binlerce öğrencinin paylaştığı notlara, özetlere ve sınav tüyolarına tek yerden ulaş. Yalnız değilsin — toplulukla birlikte daha hızlı öğren.</p>
+        <div class="hero-btns anim-up" style="--d:.38s">
+          <button class="btn-primary" onclick="openModal('loginModal')">Ücretsiz Başla →</button>
+          <button class="btn-ghost" onclick="scrollFeatures()">Nasıl Çalışır?</button>
+        </div>
+        <div class="hero-stats anim-up" style="--d:.48s">
+          <div class="hstat"><b>12.000+</b><span>Not</span></div>
+          <div class="hstat-sep"></div>
+          <div class="hstat"><b>4.800+</b><span>Üye</span></div>
+          <div class="hstat-sep"></div>
+          <div class="hstat"><b>95+</b><span>Kategori</span></div>
+        </div>
+      </div>
+      <div class="hero-visual anim-up" style="--d:.22s">
+        <div class="float-scene" id="floatScene"></div>
+      </div>
+    </section>
+
+    <section class="features" id="featuresSection">
+      <div class="feat-card rv"><div class="feat-icon">🎯</div><div><h3>Hedefine odaklan.</h3><p>YKS'den KPSS'ye, LGS'den TUS'a kadar her sınav için özel kategoriler seni bekliyor.</p></div></div>
+      <div class="feat-card rv" style="--td:.08s"><div class="feat-icon">🤝</div><div><h3>Toplulukla öğren.</h3><p>Çalışma grubu oluştur, arkadaşlarınla not paylaş. Birlikte daha güçlüsün.</p></div></div>
+      <div class="feat-card rv" style="--td:.16s"><div class="feat-icon">📈</div><div><h3>Gelişimini takip et.</h3><p>XP kazan, seviye atla, rozet topla. Çalışmak hiç bu kadar motive edici olmamıştı.</p></div></div>
+      <div class="feat-card rv" style="--td:.24s"><div class="feat-icon">📝</div><div><h3>Kişisel not defteri.</h3><p>Kendi notlarını platforma ekle, renklendir, istediğin zaman eriş.</p></div></div>
+      <div class="feat-card rv" style="--td:.32s"><div class="feat-icon">📅</div><div><h3>Çalışma takvimi.</h3><p>Her güne özel not bırak, kaç saat çalıştığını ve ne kadar verim aldığını takip et.</p></div></div>
+      <div class="feat-card rv" style="--td:.40s"><div class="feat-icon">🔒</div><div><h3>Güvenle kullan.</h3><p>Topluluk denetimi ve raporlama sistemi sayesinde kaliteli içerikler ön plana çıkar.</p></div></div>
+      <div class="land-cta rv" style="--td:.50s">
+        <h2>Hemen üye ol, ücretsiz.</h2>
+        <p>Kayıt saniyeler alır. Binlerce nota anında erişim kazan.</p>
+        <button class="btn-primary lg" onclick="openModal('loginModal')" style="margin-top:18px">Şimdi Başla →</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     APP PAGE
+══════════════════════════════════ -->
+<div id="appPage" style="display:none;flex-direction:column;height:100dvh">
+
+  <div id="sbOverlay" class="sb-overlay" onclick="closeSidebar()"></div>
+
+  <header class="app-hdr glass-hdr">
+    <div class="hdr-l">
+      <button class="hamburger" id="hamBtn" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+      <div class="logo" onclick="goHome()">bilgi<span>kaynağım</span></div>
+    </div>
+    <div class="hdr-r">
+      <button class="upd-badge-btn" id="updBtn" onclick="toggleUpdatePanel()" style="display:none">
+        <span class="upd-dot"></span> Güncelleme Notları
+      </button>
+      <button class="btn-primary sm" onclick="openModal('uploadModal')">📤 Not Yükle</button>
+      <button class="avatar-btn" id="avatarBtn" onclick="toggleProfileDd()">
+        <div class="avatar" id="hdrAvatar">?</div>
+      </button>
+    </div>
+  </header>
+
+  <!-- UPDATE PANEL -->
+  <div id="updatePanel" class="update-panel glass-modal" style="display:none"></div>
+
+  <!-- PROFILE DROPDOWN -->
+  <div class="profile-dd glass-modal" id="profileDd" style="display:none">
+    <div class="dd-user">
+      <div class="avatar lg" id="ddAvatar">?</div>
+      <div class="dd-info">
+        <div class="dd-name" id="ddName">Kullanıcı</div>
+        <div class="dd-id" id="ddId">ID: —</div>
+        <div class="dd-lvl" id="ddLvl">Seviye 1 · 0 XP</div>
+      </div>
+    </div>
+    <div class="dd-sep"></div>
+    <button class="dd-item" onclick="closeDd();goHome()">🏠 Profilim</button>
+    <button class="dd-item" onclick="closeDd();openMyNotes()">📝 Kendi Notlarım</button>
+    <button class="dd-item" onclick="closeDd();openCalendar()">📅 Takvim</button>
+    <button class="dd-item" onclick="closeDd();openModal('classModal')">👥 Grup / Sınıfım</button>
+    <div class="dd-sep"></div>
+    <div class="dd-label">TEMA</div>
+    <div class="theme-dots">
+      <div class="theme-dot dark" onclick="setTheme('theme-dark')" title="Gece"></div>
+      <div class="theme-dot white" onclick="setTheme('theme-white')" title="Beyaz"></div>
+      <div class="theme-dot black" onclick="setTheme('theme-black')" title="Siyah"></div>
+    </div>
+    <div class="dd-sep"></div>
+    <button class="dd-item danger" onclick="closeDd();logout()">🚪 Çıkış Yap</button>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar glass-sidebar" id="sidebar">
+    <div class="sb-inner">
+      <div class="sb-item active" onclick="goHome();closeSbMobile()">🏠 <span>Profilim</span></div>
+      <div class="sb-item" onclick="openCalendar();closeSbMobile()">📅 <span>Takvim</span></div>
+      <div class="sb-sep"></div>
+      <div class="sb-label">KATEGORİLER</div>
+
+      <div class="sg">
+        <div class="sg-hdr" onclick="openExamGrp('YKS','🎓');closeSbMobile()">🎓 YKS
+          <span class="sg-arrow" onclick="event.stopPropagation();toggleAcc('acc-yks',this)">›</span>
+        </div>
+        <div class="sg-body" id="acc-yks">
+          <div class="sg-item" onclick="goTo('YKS Matematik')">Matematik</div>
+          <div class="sg-item" onclick="goTo('YKS Türkçe')">Türkçe / Edebiyat</div>
+          <div class="sg-item" onclick="goTo('YKS Fizik')">Fizik</div>
+          <div class="sg-item" onclick="goTo('YKS Kimya')">Kimya</div>
+          <div class="sg-item" onclick="goTo('YKS Biyoloji')">Biyoloji</div>
+          <div class="sg-item" onclick="goTo('YKS Tarih')">Tarih</div>
+          <div class="sg-item" onclick="goTo('YKS Coğrafya')">Coğrafya</div>
+          <div class="sg-item" onclick="goTo('YKS Felsefe')">Felsefe</div>
+          <div class="sg-item" onclick="goTo('YKS YDT')">YDT</div>
+        </div>
+      </div>
+
+      <div class="sg">
+        <div class="sg-hdr" onclick="openExamGrp('KPSS','🏛️');closeSbMobile()">🏛️ KPSS
+          <span class="sg-arrow" onclick="event.stopPropagation();toggleAcc('acc-kpss',this)">›</span>
+        </div>
+        <div class="sg-body" id="acc-kpss">
+          <div class="sg-item" onclick="goTo('KPSS Genel Yetenek')">Genel Yetenek</div>
+          <div class="sg-item" onclick="goTo('KPSS Genel Kültür')">Genel Kültür</div>
+          <div class="sg-item" onclick="goTo('KPSS Eğitim Bilimleri')">Eğitim Bilimleri</div>
+          <div class="sg-item" onclick="goTo('KPSS ÖABT')">ÖABT</div>
+        </div>
+      </div>
+
+      <div class="sg">
+        <div class="sg-hdr" onclick="openExamGrp('DİĞER','📌');closeSbMobile()">📌 Diğer Sınavlar
+          <span class="sg-arrow" onclick="event.stopPropagation();toggleAcc('acc-diger',this)">›</span>
+        </div>
+        <div class="sg-body" id="acc-diger">
+          <div class="sg-sublabel">Yükseköğretim</div>
+          <div class="sg-item" onclick="goTo('ALES Sayısal')">ALES Sayısal</div>
+          <div class="sg-item" onclick="goTo('ALES Sözel')">ALES Sözel</div>
+          <div class="sg-item" onclick="goTo('DGS Matematik')">DGS</div>
+          <div class="sg-sublabel">Yabancı Dil</div>
+          <div class="sg-item" onclick="goTo('YDS İngilizce')">YDS İngilizce</div>
+          <div class="sg-item" onclick="goTo('YDS Almanca')">YDS Almanca</div>
+          <div class="sg-item" onclick="goTo('YÖKDİL Sağlık')">YÖKDİL</div>
+          <div class="sg-sublabel">Mesleki</div>
+          <div class="sg-item" onclick="goTo('TUS Temel Bilimler')">TUS</div>
+          <div class="sg-item" onclick="goTo('DUS Diş Hekimliği')">DUS</div>
+          <div class="sg-item" onclick="goTo('Hakimlik Adli Yargı')">Hakimlik</div>
+          <div class="sg-item" onclick="goTo('MSÜ Sayısal')">MSÜ</div>
+          <div class="sg-item" onclick="goTo('EKPSS')">EKPSS</div>
+          <div class="sg-item" onclick="goTo('YÖS')">YÖS</div>
+        </div>
+      </div>
+
+      <!-- Divider between Diğer and Lise -->
+      <div class="sb-sep-soft"></div>
+
+      <div class="sg">
+        <div class="sg-hdr" onclick="openExamGrp('LİSE','📚');closeSbMobile()">📚 Lise
+          <span class="sg-arrow" onclick="event.stopPropagation();toggleAcc('acc-lise',this)">›</span>
+        </div>
+        <div class="sg-body" id="acc-lise">
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-l12',this)">12. Sınıf <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-l12">
+            <div class="sg-item d" onclick="goTo('12. Sınıf Matematik')">Matematik</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf Fizik')">Fizik</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf Kimya')">Kimya</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf Biyoloji')">Biyoloji</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf Edebiyat')">Türk Edebiyatı</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf İnkılap')">İnkılap Tarihi</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf İngilizce')">İngilizce</div>
+            <div class="sg-item d" onclick="goTo('12. Sınıf Din Kültürü')">Din Kültürü</div>
+          </div>
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-l11',this)">11. Sınıf <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-l11">
+            <div class="sg-item d" onclick="goTo('11. Sınıf Matematik')">Matematik</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Fizik')">Fizik</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Kimya')">Kimya</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Biyoloji')">Biyoloji</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Edebiyat')">Türk Edebiyatı</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Tarih')">Tarih</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf Coğrafya')">Coğrafya</div>
+            <div class="sg-item d" onclick="goTo('11. Sınıf İngilizce')">İngilizce</div>
+          </div>
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-l10',this)">10. Sınıf <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-l10">
+            <div class="sg-item d" onclick="goTo('10. Sınıf Matematik')">Matematik</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Fizik')">Fizik</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Kimya')">Kimya</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Biyoloji')">Biyoloji</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Edebiyat')">Türk Edebiyatı</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Tarih')">Tarih</div>
+            <div class="sg-item d" onclick="goTo('10. Sınıf Coğrafya')">Coğrafya</div>
+          </div>
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-l9',this)">9. Sınıf <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-l9">
+            <div class="sg-item d" onclick="goTo('9. Sınıf Matematik')">Matematik</div>
+            <div class="sg-item d" onclick="goTo('9. Sınıf Fizik')">Fizik</div>
+            <div class="sg-item d" onclick="goTo('9. Sınıf Kimya')">Kimya</div>
+            <div class="sg-item d" onclick="goTo('9. Sınıf Biyoloji')">Biyoloji</div>
+            <div class="sg-item d" onclick="goTo('9. Sınıf Edebiyat')">Türk Edebiyatı</div>
+            <div class="sg-item d" onclick="goTo('9. Sınıf Tarih')">Tarih</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sg">
+        <div class="sg-hdr" onclick="openExamGrp('ORTAOKUL','🏫');closeSbMobile()">🏫 Ortaokul
+          <span class="sg-arrow" onclick="event.stopPropagation();toggleAcc('acc-orta',this)">›</span>
+        </div>
+        <div class="sg-body" id="acc-orta">
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-o8',this)">8. Sınıf (LGS) <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-o8">
+            <div class="sg-item d" onclick="goTo('8. Sınıf Türkçe')">Türkçe</div>
+            <div class="sg-item d" onclick="goTo('8. Sınıf Matematik')">Matematik</div>
+            <div class="sg-item d" onclick="goTo('8. Sınıf Fen Bilimleri')">Fen Bilimleri</div>
+            <div class="sg-item d" onclick="goTo('8. Sınıf İnkılap')">İnkılap Tarihi</div>
+            <div class="sg-item d" onclick="goTo('8. Sınıf İngilizce')">İngilizce</div>
+          </div>
+          <div class="sg-nested-hdr" onclick="toggleAcc('acc-o567',this)">5–7. Sınıf <span class="sg-arrow sm">›</span></div>
+          <div class="sg-body sub" id="acc-o567">
+            <div class="sg-item d" onclick="goTo('7. Sınıf Matematik')">7. Sınıf Mat.</div>
+            <div class="sg-item d" onclick="goTo('7. Sınıf Türkçe')">7. Sınıf Türkçe</div>
+            <div class="sg-item d" onclick="goTo('6. Sınıf Matematik')">6. Sınıf Mat.</div>
+            <div class="sg-item d" onclick="goTo('5. Sınıf Türkçe')">5. Sınıf Türkçe</div>
+            <div class="sg-item d" onclick="goTo('5. Sınıf Matematik')">5. Sınıf Mat.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ortaokul alt çizgi + Üniversite -->
+      <div class="sb-sep-soft"></div>
+      <div class="sg-hdr sb-coming" onclick="showUniComingSoon()">🎓 Üniversite Notları <span class="sb-soon-tag">Çok Yakında</span></div>
+
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-wrap" id="contentWrap">
+    <div class="content" id="content">
+
+      <!-- HOME -->
+      <div id="vHome" class="view active">
+        <div class="welcome-bar" id="welcomeBar" onclick="openModal('profileModal')" style="cursor:pointer" title="Profil bilgileri için tıkla">
+          <div class="wb-left">
+            <div class="wb-greet" id="wbGreet">İyi günler ☀️</div>
+            <div class="wb-name" id="wbName">Kullanıcı</div>
+            <div class="wb-motive" id="wbMotive"></div>
+          </div>
+          <div class="wb-arrow">›</div>
+        </div>
+        <div class="bento" id="bento"></div>
+      </div>
+
+      <!-- NOTES LIST -->
+      <div id="vNotes" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="closeNotesView()">✕ Kapat</button>
+          <h2 class="view-title" id="notesCatTitle">Notlar</h2>
+          <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilter()">⚡ Filtrele <span class="fbadge" id="filterBadge"></span></button>
+        </div>
+        <div id="filterPanel" class="filter-panel glass-card"></div>
+        <div class="notes-grid" id="notesGrid"></div>
+      </div>
+
+      <!-- NOTE DETAIL -->
+      <div id="vDetail" class="view">
+        <div class="detail-top">
+          <button class="back-btn" onclick="goBackDetail()">← Geri</button>
+          <div class="detail-top-right">
+            <button class="act-btn fullscreen-btn" onclick="openReadFullPage()" title="Tam ekranda oku">↗ Tam Ekran</button>
+            <button class="report-btn" style="margin-left:8px" onclick="openModal('reportModal')">🚩 Rapor Et</button>
+          </div>
+        </div>
+        <div class="detail-card glass-card">
+          <h1 id="dTitle" class="detail-title"></h1>
+          <div id="dUser" class="detail-meta"></div>
+          <div id="dStats" class="detail-stats"></div>
+          <div id="dContent" class="detail-body"></div>
+        </div>
+        <div class="action-bar glass-card">
+          <button class="act-btn" onclick="readInSite()">📖 Oku</button>
+          <button class="act-btn" onclick="downloadNote()">📥 İndir</button>
+          <button class="act-btn fav" id="favBtn" onclick="toggleFav()">🤍 Favori</button>
+          <button class="act-btn ok" onclick="openRecModal('up')">👍 Öner</button>
+          <button class="act-btn bad" onclick="openRecModal('down')">👎 Önerme</button>
+          <button class="act-btn" onclick="shareGroup()">👥 Gruba Paylaş</button>
+        </div>
+        <div class="comments-wrap glass-card">
+          <h3 class="comments-hdr">Değerlendirmeler</h3>
+          <div id="commentsList"></div>
+        </div>
+      </div>
+
+      <!-- EXAM GROUP -->
+      <div id="vExamGrp" class="view">
+        <div class="eg-top glass-card">
+          <button class="back-btn" onclick="closeExamGrp()">✕ Kapat</button>
+          <div class="eg-title" id="egTitle"></div>
+        </div>
+        <div id="egBar" class="eg-bar glass-card"></div>
+        <div id="egPins" class="eg-pins"></div>
+        <h3 class="section-lbl" id="egNotesLbl"></h3>
+        <div class="notes-grid" id="egGrid"></div>
+      </div>
+
+      <!-- MY NOTES -->
+      <div id="vMyNotes" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title" id="myNotesTitle">📝 Kendi Notlarım</h2>
+          <button class="btn-secondary" onclick="openAddNote()">+ Not Ekle</button>
+        </div>
+        <div class="notes-grid" id="myNotesGrid"></div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div id="vCalendar" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">📅 Çalışma Takvimi</h2>
+          <button class="btn-secondary" id="calAddTopBtn" onclick="openAddCal()" style="display:none">+ Ekle</button>
+        </div>
+        <div id="calEmpty" class="cd-empty">
+          <div style="font-size:48px;margin-bottom:14px">📅</div>
+          <p>Henüz çalışma kaydı yok.</p>
+          <button class="btn-primary" style="margin-top:14px;padding:12px 28px" onclick="openAddCal()">+ Kayıt Ekle</button>
+        </div>
+        <div id="calGrid" class="cal-grid" style="display:none"></div>
+      </div>
+
+      <!-- COUNTDOWNS -->
+      <div id="vCd" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">⏳ Sınav Sayaçları</h2>
+          <button class="btn-secondary" id="cdAddTopBtn" onclick="openModal('cdModal')" style="display:none">+ Ekle</button>
+        </div>
+        <div id="cdEmpty" class="cd-empty">
+          <div style="font-size:48px;margin-bottom:14px">⏳</div>
+          <p>Henüz sınav sayacı eklenmedi.</p>
+          <button class="btn-primary" style="margin-top:14px;padding:12px 28px" onclick="openModal('cdModal')">+ Sayaç Ekle</button>
+        </div>
+        <div class="notes-grid" id="cdGrid" style="display:none"></div>
+      </div>
+
+      <!-- SUGGESTIONS -->
+      <div id="vSugg" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">💡 Çalışma Önerileri</h2>
+          <button class="btn-secondary" onclick="openModal('suggModal')">+ Ekle</button>
+        </div>
+        <div class="notes-grid" id="suggGrid"></div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div id="vLb" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">🏆 Liderlik Tablosu</h2>
+        </div>
+        <div id="lbContainer"></div>
+      </div>
+
+      <!-- WIZARD -->
+      <div id="vWizard" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">🎯 Bugün Ne Çalışayım?</h2>
+        </div>
+        <div class="wz-search-bar">
+          <input type="text" id="wzSearch" class="inp" placeholder="🔍 Konu veya ders ara..." oninput="wzSearchFilter(this.value)" style="margin-bottom:0">
+        </div>
+        <div id="wzProgress" class="wz-progress"></div>
+        <div id="wizardBox" class="wizard-box"></div>
+      </div>
+
+      <!-- RECENT -->
+      <div id="vRecent" class="view">
+        <div class="view-hdr">
+          <button class="back-btn" onclick="goHome()">← Geri</button>
+          <h2 class="view-title">🕐 Son Baktıklarım</h2>
+        </div>
+        <div class="notes-grid" id="recentGrid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FABs -->
+  <div class="fabs">
+    <button class="fab" onclick="openModal('bugModal')" title="Hata Bildir">🐛</button>
+    <button class="fab" onclick="openModal('fikirModal')" title="Fikir İlet">💡</button>
+  </div>
+
+  <!-- GROUP DRAWER (full screen overlay) -->
+  <div id="groupDrawer" class="group-drawer" style="display:none">
+    <div class="group-drawer-inner glass-modal">
+      <div class="group-hdr">
+        <div>
+          <h2 id="drawerGrpTitle" style="font-size:17px;font-weight:800"></h2>
+          <div id="drawerGrpCat" style="font-size:11px;opacity:.45;margin-top:2px"></div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <button class="chip" onclick="reportGroup()">🚩 Raporla</button>
+          <button class="btn-danger-sm" onclick="leaveGroup()">🚪 Çık</button>
+          <button onclick="closeGroupDrawer()" style="background:none;border:none;cursor:pointer;font-size:18px;opacity:.45;color:var(--txt);padding:4px 6px">✕</button>
+        </div>
+      </div>
+      <div class="group-body">
+        <div class="group-sidebar glass-card">
+          <h4 style="margin-bottom:8px;font-size:13px">Üyeler (<span id="drawerMemCount">0</span>)</h4>
+          <div id="drawerMemList" style="overflow-y:auto;flex:1"></div>
+          <div style="margin-top:12px;border-top:1px solid rgba(128,128,128,.08);padding-top:9px">
+            <h4 style="font-size:12px;margin-bottom:8px;color:var(--accent)">Davetler (<span id="drawerInvCount">0</span>)</h4>
+            <div id="drawerInvList" style="max-height:80px;overflow-y:auto"></div>
+          </div>
+          <button class="btn-primary" style="width:100%;margin-top:10px;font-size:12px;padding:9px" onclick="openInviteModal()">📨 Davet Gönder</button>
+        </div>
+        <div class="group-chat">
+          <div class="tab-bar" style="margin:0;border-radius:0;border-left:none;border-right:none;border-top:none">
+            <button class="tab-btn active" id="dtab1" onclick="switchGTab('chat','d')">💬 Sohbet</button>
+            <button class="tab-btn" id="dtab2" onclick="switchGTab('notes','d')">📄 Notlar</button>
+            <div class="tab-line" id="dTabLine"></div>
+          </div>
+          <div class="gtab-panels" style="flex:1">
+            <div id="dChatPanel" class="gpanel active">
+              <div class="chat-box" id="drawerChatBox"></div>
+              <div class="chat-quick-row">
+                <div id="drawerChatQuick" class="chat-quick"></div>
+                <button class="why-btn" onclick="showWhyMsg()">Neden özgürce mesaj yazamıyorum? ℹ️</button>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" id="drawerChatInp" placeholder="Hızlı mesaj seçin..." class="chat-inp" readonly onfocus="showWhyMsg()">
+                <button class="btn-primary" style="padding:9px 16px;margin:0;flex-shrink:0" onclick="sendMsg('drawer')">Gönder</button>
+              </div>
+            </div>
+            <div id="dNotesPanel" class="gpanel">
+              <div id="drawerGroupNotes" style="flex:1;overflow-y:auto;padding:12px"></div>
+              <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,.05)">
+                <input type="file" id="drawerGrpFile" accept=".pdf" style="display:none" onchange="onGroupFile(event,'drawer')">
+                <button class="btn-primary" style="width:100%;font-size:12px;padding:10px;margin:0" onclick="document.getElementById('drawerGrpFile').click()">📎 PDF Not Paylaş</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MODALS
+══════════════════════════════════ -->
+
+<!-- LOGIN -->
+<div class="modal" id="loginModal">
+  <div class="modal-box glass-modal login-box">
+    <button class="modal-x" onclick="closeModal('loginModal')">✕</button>
+    <div class="login-left">
+      <div class="logo big">bilgi<span>kaynağım</span></div>
+      <h2 class="login-title">Hoş geldin.</h2>
+      <p class="login-sub">Türkiye'nin en kapsamlı not paylaşım platformuna katıl.</p>
+      <div class="login-feats">
+        <div>✅ 12.000+ not içeriği</div><div>✅ Çalışma grupları</div>
+        <div>✅ Kişisel not defteri</div><div>✅ Çalışma takvimi</div>
+        <div>✅ Tamamen ücretsiz</div>
+      </div>
+    </div>
+    <div class="login-right">
+      <h3 style="color:var(--accent);margin-bottom:5px">Giriş Yap</h3>
+      <p style="font-size:12px;opacity:.55;margin-bottom:22px">Bir hesap ile devam edin.</p>
+      <button class="social-btn google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google ile Devam Et
+      </button>
+      <button class="social-btn apple" onclick="loginWithEmailModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        E-posta ile Giriş / Kayıt
+      </button>
+      <p style="font-size:11px;opacity:.4;text-align:center;margin-top:6px">📱 Yakında iOS ve Android uygulamasında da kullanılabilecek.</p>
+      <input type="hidden" id="loginProv">
+    </div>
+  </div>
+</div>
+
+<!-- NAME -->
+<div class="modal" id="nameModal">
+  <div class="modal-box glass-modal" style="max-width:400px">
+    <button class="modal-x" onclick="closeModal('nameModal')">✕</button>
+    <h2 class="modal-title">Kayıt Bilgileri</h2>
+    <p class="modal-sub">Kullanıcı adınızı belirleyin. Adınızı 3 ayda bir değiştirebilirsiniz.</p>
+    <input type="text" id="nameInput" class="inp" placeholder="Kullanıcı Adınız" onkeydown="if(event.key==='Enter')finalizeLogin()">
+    <button class="btn-primary full" onclick="finalizeLogin()">Onayla ve Başla</button>
+  </div>
+</div>
+
+<!-- CHANGE USERNAME MODAL -->
+<div class="modal" id="changeNameModal">
+  <div class="modal-box glass-modal" style="max-width:400px">
+    <button class="modal-x" onclick="closeModal('changeNameModal')">✕</button>
+    <h2 class="modal-title">✏️ Ad Değiştir</h2>
+    <p class="modal-sub">Yeni kullanıcı adınızı girin. Adınızı 3 ayda bir değiştirebilirsiniz.</p>
+    <input type="text" id="changeNameInput" class="inp" placeholder="Yeni Kullanıcı Adı" onkeydown="if(event.key==='Enter')confirmChangeName()">
+    <div style="display:flex;gap:9px">
+      <button class="btn-primary" style="flex:1;margin:0" onclick="confirmChangeName()">Kaydet</button>
+      <button class="btn-ghost" style="flex:1;margin:0" onclick="closeModal('changeNameModal')">Vazgeç</button>
+    </div>
+  </div>
+</div>
+
+<!-- READ -->
+<div class="modal" id="readModal">
+  <div class="modal-box glass-modal" style="max-width:720px;max-height:90vh;overflow-y:auto">
+    <button class="modal-x" onclick="closeModal('readModal')">✕</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap">
+      <h2 class="modal-title" id="readTitle" style="margin:0;flex:1"></h2>
+      <button class="btn-secondary" style="flex-shrink:0" onclick="openReadFullPage()">↗ Tam Ekran</button>
+    </div>
+    <div class="read-body" id="readBody"></div>
+  </div>
+</div>
+
+<!-- FULL PAGE READ -->
+<div id="fullReadPage" style="display:none;position:fixed;inset:0;z-index:9000;overflow-y:auto;background:var(--bg);padding:32px clamp(14px,6vw,80px)">
+  <div style="max-width:800px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+      <button class="back-btn" onclick="closeFullRead()">← Geri</button>
+      <h1 id="fullReadTitle" style="font-size:clamp(16px,3vw,24px);font-weight:800;color:var(--acc);flex:1"></h1>
+    </div>
+    <div id="fullReadBody" style="font-size:15px;line-height:1.8;opacity:.88;white-space:pre-wrap"></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="modal" id="profileModal">
+  <div class="modal-box glass-modal" style="max-width:480px;max-height:92vh;overflow-y:auto">
+    <div class="prof-modal-hdr">
+      <button class="modal-x-inline" onclick="closeModal('profileModal')">✕</button>
+      <button class="btn-secondary" style="font-size:11px;padding:5px 11px;flex-shrink:0;white-space:nowrap" onclick="closeModal('profileModal');openModal('changeNameModal')">✏️ Ad Değiştir</button>
+    </div>
+    <div class="prof-head">
+      <div class="lvl-circle" id="profCircle"><div class="lvl-inner" id="profLvlNum">1</div></div>
+      <div style="min-width:0;flex:1">
+        <h2 id="profName" class="prof-name"></h2>
+        <div id="profIdTxt" style="font-size:11px;opacity:.45;margin-top:2px"></div>
+        <div id="profProvTxt" style="font-size:10px;opacity:.38;margin-top:1px"></div>
+      </div>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-row"><span id="xpLbl">Seviye 1</span><span id="xpCnt">0 / 10 XP</span></div>
+      <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+    <div class="badges" id="badgesRow"></div>
+    <div class="prof-stats">
+      <div class="pstat glass-card"><div id="ps_xp" class="pstat-n">0</div><div class="pstat-l">XP</div></div>
+      <div class="pstat glass-card"><div id="ps_com" class="pstat-n">0</div><div class="pstat-l">Yorum</div></div>
+      <div class="pstat glass-card"><div id="ps_fav" class="pstat-n" style="color:var(--gold)">0</div><div class="pstat-l">Favori</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px">
+      <button class="btn-primary" style="margin:0" onclick="closeModal('profileModal');openMyNotes()">📝 Notlarım</button>
+      <button class="btn-primary" style="margin:0" onclick="closeModal('profileModal');openModal('classModal')">👥 Grubum</button>
+    </div>
+    <!-- Bugün Ne Yapayım? adımlı wizard (profil içi) -->
+    <div class="tw-section glass-card">
+      <div class="tw-section-hdr">
+        <span style="font-size:16px">🎯</span>
+        <span style="font-weight:700;font-size:13px;color:var(--acc)">Bugün Ne Yapayım?</span>
+      </div>
+      <div id="twBox" class="tw-box"></div>
+    </div>
+    <!-- Yaptıklarım -->
+    <div class="tw-section glass-card" style="margin-top:10px">
+      <div class="tw-section-hdr">
+        <span style="font-size:16px">📋</span>
+        <span style="font-weight:700;font-size:13px;color:var(--acc)">Yaptıklarım</span>
+      </div>
+      <div id="activitiesBox" class="activities-box"></div>
+    </div>
+    <h3 style="font-size:13px;color:var(--accent);margin:0 0 8px">⭐ Favorilerim</h3>
+    <div id="profFavList" style="max-height:110px;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px"></div>
+    <h3 style="font-size:13px;color:var(--accent);margin:0 0 8px">Değerlendirmelerim</h3>
+    <div id="profComList" style="font-size:12px;opacity:.6;max-height:100px;overflow-y:auto;margin-bottom:16px"></div>
+    <!-- XP Bar at bottom -->
+    <div class="prof-bottom-xp glass-card">
+      <div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px">Seviye İlerlemesi</div>
+      <div class="xp-row" style="margin-bottom:5px"><span id="xpLbl2">Seviye 1</span><span id="xpCnt2">0 / 10 XP</span></div>
+      <div class="xp-track"><div class="xp-fill" id="xpFill2" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD NOTE (bigger) -->
+<div class="modal" id="addNoteModal">
+  <div class="modal-box glass-modal" style="max-width:560px;max-height:92vh;overflow-y:auto">
+    <button class="modal-x" onclick="closeModal('addNoteModal')">✕</button>
+    <h2 class="modal-title">📝 Not Ekle</h2>
+    <input type="text" id="mnTitle" class="inp" placeholder="Not Başlığı">
+    <textarea id="mnContent" class="inp" rows="8" placeholder="Not içeriğini buraya yazın... (Kopyala-yapıştır desteklenir)"></textarea>
+    <div class="color-grid" id="mnColorGrid">
+      <div class="col-opt" onclick="selColor(this,'default')">⬜ Varsayılan</div>
+      <div class="col-opt" onclick="selColor(this,'blue')">🔵 Mavi</div>
+      <div class="col-opt" onclick="selColor(this,'green')">🟢 Yeşil</div>
+      <div class="col-opt" onclick="selColor(this,'yellow')">🟡 Sarı</div>
+      <div class="col-opt" onclick="selColor(this,'red')">🔴 Kırmızı</div>
+      <div class="col-opt" onclick="selColor(this,'purple')">🟣 Mor</div>
+    </div>
+    <input type="hidden" id="mnColor" value="default">
+    <button class="btn-primary full" onclick="saveMyNote()">Kaydet</button>
+  </div>
+</div>
+
+<!-- EDIT NOTE MODAL -->
+<div class="modal" id="editNoteModal">
+  <div class="modal-box glass-modal" style="max-width:560px;max-height:92vh;overflow-y:auto">
+    <button class="modal-x" onclick="closeModal('editNoteModal')">✕</button>
+    <h2 class="modal-title">✏️ Notu Düzenle</h2>
+    <input type="hidden" id="editNoteId">
+    <input type="text" id="editNoteTitle" class="inp" placeholder="Not Başlığı">
+    <textarea id="editNoteContent" class="inp" rows="8" placeholder="Not içeriğini düzenleyin..."></textarea>
+    <div class="color-grid" id="editColorGrid">
+      <div class="col-opt" data-color="default" onclick="selEditColor(this,'default')">⬜ Varsayılan</div>
+      <div class="col-opt" data-color="blue" onclick="selEditColor(this,'blue')">🔵 Mavi</div>
+      <div class="col-opt" data-color="green" onclick="selEditColor(this,'green')">🟢 Yeşil</div>
+      <div class="col-opt" data-color="yellow" onclick="selEditColor(this,'yellow')">🟡 Sarı</div>
+      <div class="col-opt" data-color="red" onclick="selEditColor(this,'red')">🔴 Kırmızı</div>
+      <div class="col-opt" data-color="purple" onclick="selEditColor(this,'purple')">🟣 Mor</div>
+    </div>
+    <input type="hidden" id="editNoteColorVal" value="default">
+    <div style="display:flex;gap:9px">
+      <button class="btn-primary" style="flex:1;margin:0" onclick="saveEditNote()">💾 Kaydet</button>
+      <button class="btn-ghost" style="flex:1;margin:0" onclick="closeModal('editNoteModal')">Vazgeç</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAL ENTRY -->
+<div class="modal" id="calModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('calModal')">✕</button>
+    <h2 class="modal-title">📅 Çalışma Kaydı</h2>
+    <input type="date" id="calDate" class="inp">
+    <input type="text" id="calSubj" class="inp" placeholder="Ne çalıştınız? (ör: YKS Matematik)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <input type="number" id="calHours" class="inp" placeholder="Saat" min="0" max="24" style="margin:0">
+      <input type="number" id="calQ" class="inp" placeholder="Soru sayısı" min="0" style="margin:0">
+    </div>
+    <div style="margin:10px 0 5px;font-size:11px;opacity:.5">Verim (isteğe bağlı)</div>
+    <div class="csel-grid" id="calPerfGrid">
+      <div class="csel" onclick="cselPick(this,'calPerf','low')">😐 Düşük</div>
+      <div class="csel" onclick="cselPick(this,'calPerf','mid')">😊 Orta</div>
+      <div class="csel" onclick="cselPick(this,'calPerf','high')">🔥 Yüksek</div>
+      <div class="csel" onclick="cselPick(this,'calPerf','peak')">⚡ Zirve</div>
+    </div>
+    <input type="hidden" id="calPerf" value="">
+    <textarea id="calNote" class="inp" rows="2" placeholder="Notunuz (isteğe bağlı)..."></textarea>
+    <button class="btn-primary full" onclick="saveCalEntry()">Kaydet</button>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div class="modal" id="uploadModal">
+  <div class="modal-box glass-modal" style="max-width:520px;padding:32px">
+    <button class="modal-x" onclick="closeModal('uploadModal')">✕</button>
+    <h2 class="modal-title">📤 Not Yükle</h2>
+    <input type="text" id="upTitle" class="inp" placeholder="Not Başlığı *">
+    <textarea id="upDesc" class="inp" rows="2" placeholder="Açıklama (isteğe bağlı)"></textarea>
+    <select id="upCat" class="inp"></select>
+    <label class="file-lbl" id="fileLbl">
+      <input type="file" id="upFile" accept=".pdf" style="display:none" onchange="onFileSelect(event)">
+      <span id="fileText">📄 PDF Dosyası Seç (veya buraya sürükleyin)</span>
+    </label>
+    <button class="btn-primary full" onclick="submitUpload()">Sisteme Yükle</button>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="modal" id="cdModal">
+  <div class="modal-box glass-modal" style="max-width:580px">
+    <button class="modal-x" onclick="closeModal('cdModal')">✕</button>
+    <h2 class="modal-title">⏳ Sınav Sayacı Ekle</h2>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="cdTab1" onclick="switchCdTab('custom')">✏️ Kendim Gireceğim</button>
+      <button class="tab-btn" id="cdTab2" onclick="switchCdTab('preset')">📋 Hazır Seçeceğim</button>
+      <div class="tab-line" id="cdTabLine"></div>
+    </div>
+    <div id="cdCustom">
+      <input type="text" id="cdName" class="inp" placeholder="Sınav Adı (ör: YKS 2026)">
+      <input type="text" id="cdEmoji" class="inp" placeholder="Emoji (isteğe bağlı, ör: 🎓)">
+      <input type="number" id="cdDays" class="inp" placeholder="Kaç gün kaldı?">
+      <button class="btn-primary full" onclick="saveCd('custom')">Ekle</button>
+    </div>
+    <div id="cdPreset" style="display:none">
+      <div class="csel-grid" id="cdPresetGrid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
+      <input type="hidden" id="cdPresetVal">
+      <button class="btn-primary full" onclick="saveCd('preset')">Seçileni Ekle</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SUGGESTION -->
+<div class="modal" id="suggModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('suggModal')">✕</button>
+    <h2 class="modal-title">💡 Öneri Ekle</h2>
+    <textarea id="suggTxt" class="inp" rows="4" placeholder="Çalışma taktiğinizi paylaşın..."></textarea>
+    <button class="btn-primary full" onclick="submitSugg()">Ekle</button>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div class="modal" id="reportModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('reportModal')">✕</button>
+    <h2 class="modal-title" style="color:#ef4444">🚩 Rapor Et</h2>
+    <p class="modal-sub">Rapor türünü seçin:</p>
+    <div class="csel-grid" id="repGrid">
+      <div class="csel" onclick="cselPick(this,'repReason','kufur')">İhlal / Küfür</div>
+      <div class="csel" onclick="cselPick(this,'repReason','ilgisiz')">İlgisiz İçerik</div>
+      <div class="csel" onclick="cselPick(this,'repReason','yanlis')">Yanlış Bilgi</div>
+      <div class="csel" onclick="cselPick(this,'repReason','spam')">Spam</div>
+    </div>
+    <input type="hidden" id="repReason">
+    <textarea id="repNote" class="inp" rows="2" placeholder="Açıklama (isteğe bağlı)..."></textarea>
+    <button class="btn-danger full" onclick="submitReport()">Raporu Gönder</button>
+  </div>
+</div>
+
+<!-- RECOMMEND -->
+<div class="modal" id="recModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('recModal')">✕</button>
+    <h2 class="modal-title" id="recTitle">Değerlendirme</h2>
+    <div class="csel-grid" id="recGrid"></div>
+    <input type="hidden" id="recType"><input type="hidden" id="recSel">
+    <button class="btn-primary full" onclick="submitRec()">Gönder</button>
+  </div>
+</div>
+
+<!-- BUG -->
+<div class="modal" id="bugModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('bugModal')">✕</button>
+    <h2 class="modal-title" style="color:#ef4444">🐛 Hata Bildir</h2>
+    <div class="csel-grid" id="bugGrid">
+      <div class="csel" onclick="cselPick(this,'bugCat','buton')">Çalışmayan buton</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','anim')">Animasyon sorunu</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','tema')">Tema sorunu</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','mobil')">Mobil uyum</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','arama')">Arama / Filtre</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','perf')">Performans</div>
+      <div class="csel" onclick="cselPick(this,'bugCat','diger')">Diğer</div>
+    </div>
+    <input type="hidden" id="bugCat">
+    <textarea id="bugTxt" class="inp" rows="3" placeholder="Hatayı kısaca açıklayın..."></textarea>
+    <button class="btn-danger full" onclick="submitBug()">Raporu Gönder</button>
+  </div>
+</div>
+
+<!-- FİKİR -->
+<div class="modal" id="fikirModal">
+  <div class="modal-box glass-modal">
+    <button class="modal-x" onclick="closeModal('fikirModal')">✕</button>
+    <h2 class="modal-title">💡 Fikir İlet</h2>
+    <textarea id="fikirTxt" class="inp" rows="4" placeholder="Fikrinizi yazın..."></textarea>
+    <button class="btn-primary full" onclick="submitFikir()">Gönder</button>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div id="confirmOverlay" class="overlay">
+  <div class="confirm-box glass-modal">
+    <div id="confirmIcon" class="confirm-icon">⚠️</div>
+    <h3 id="confirmTitle" class="confirm-title"></h3>
+    <p id="confirmMsg" class="confirm-msg"></p>
+    <div id="confirmBtns" class="confirm-btns"></div>
+  </div>
+</div>
+
+<!-- CLASS MODAL -->
+<div class="modal" id="classModal">
+  <div class="class-wrap">
+    <!-- NO GROUP -->
+    <div class="modal-box glass-modal" id="noGroup" style="max-width:720px;max-height:90vh;overflow-y:auto">
+      <button class="modal-x" onclick="closeModal('classModal')">✕</button>
+      <h2 class="modal-title" style="text-align:center">👥 Sınıfım / Arkadaşlarım</h2>
+      <p class="modal-sub" style="text-align:center">Henüz bir gruba üye değilsiniz.</p>
+      <!-- Sadece grup listesi + oluştur butonu görünür -->
+      <div id="groupJoinSection">
+        <div style="text-align:center;margin-bottom:18px">
+          <button class="btn-primary" style="width:auto;padding:11px 26px" onclick="showCreateGroup()">+ Yeni Grup Oluştur</button>
+        </div>
+        <div class="group-filter">
+        <input type="text" id="gSearch" class="inp" placeholder="🔍 Grup ara..." style="margin-bottom:8px" oninput="filterGroups(this.value)">
+        <div class="filter-chips-row" id="gCatFilters">
+          <button class="chip active" onclick="filterGroupCat('all',this)">Tümü</button>
+          <button class="chip" onclick="filterGroupCat('YKS',this)">YKS</button>
+          <button class="chip" onclick="filterGroupCat('KPSS',this)">KPSS</button>
+          <button class="chip" onclick="filterGroupCat('LGS',this)">LGS</button>
+          <button class="chip" onclick="filterGroupCat('Diğer',this)">Diğer</button>
+        </div>
+      </div>
+        <h3 style="margin-bottom:12px">Mevcut Gruplara Katıl</h3>
+        <div id="groupList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:11px;max-height:260px;overflow-y:auto;padding:4px"></div>
+      </div><!-- /groupJoinSection -->
+      <!-- Grup oluşturma formu — sadece bu görünür, liste gizlenir -->
+      <div id="createGroupBox" style="display:none;max-width:480px;margin:0 auto">
+        <h3 style="color:var(--acc);margin-bottom:14px;font-size:15px">✨ Yeni Grup Oluştur</h3>
+        <input type="text" id="gName" class="inp" placeholder="Grup Adı *">
+        <textarea id="gDesc" class="inp" rows="3" placeholder="Açıklama * (en az 20 karakter)"></textarea>
+        <select id="gCat" class="inp">
+          <option value="">Kategori Seçin *</option>
+          <option value="YKS">YKS</option><option value="KPSS">KPSS</option>
+          <option value="LGS">LGS</option><option value="ALES">ALES</option>
+          <option value="YDS/YÖKDİL">YDS / YÖKDİL</option><option value="TUS/DUS">TUS / DUS</option>
+          <option value="Lise">Lise</option><option value="Ortaokul">Ortaokul</option><option value="Diğer">Diğer</option>
+        </select>
+        <div style="display:flex;gap:9px">
+          <button class="btn-primary" style="flex:1;margin:0" onclick="createGroup()">✅ Oluştur</button>
+          <button class="btn-ghost" style="flex:1;margin:0" onclick="hideCreateGroup()">İptal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAS GROUP (shown inside class modal only if no drawer) -->
+    <div class="modal-box glass-modal" id="hasGroup" style="display:none;max-width:1000px;height:88vh;overflow:hidden;padding:0">
+      <div class="group-hdr">
+        <div>
+          <h2 id="grpTitle" style="font-size:17px;font-weight:800"></h2>
+          <div id="grpCatLbl" style="font-size:11px;opacity:.45;margin-top:2px"></div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <button class="chip" onclick="reportGroup()">🚩 Raporla</button>
+          <button class="btn-danger-sm" onclick="leaveGroup()">🚪 Çık</button>
+          <button class="modal-x" style="position:relative;top:0;right:0" onclick="closeModal('classModal')">✕</button>
+        </div>
+      </div>
+      <div class="group-body">
+        <div class="group-sidebar glass-card">
+          <h4 style="margin-bottom:8px;font-size:13px">Üyeler (<span id="memCount">0</span>)</h4>
+          <div id="memList" style="max-height:180px;overflow-y:auto"></div>
+          <div style="margin-top:12px;border-top:1px solid rgba(128,128,128,.08);padding-top:9px">
+            <h4 style="font-size:12px;margin-bottom:8px;color:var(--accent)">Davetler (<span id="invCount">0</span>)</h4>
+            <div id="invList" style="max-height:90px;overflow-y:auto"></div>
+          </div>
+          <button class="btn-primary" style="width:100%;margin-top:12px;font-size:12px;padding:9px" onclick="openInviteModal()">📨 Davet Gönder</button>
+        </div>
+        <div class="group-chat">
+          <div class="tab-bar">
+            <button class="tab-btn active" id="gtab1" onclick="switchGTab('chat','m')">💬 Sohbet</button>
+            <button class="tab-btn" id="gtab2" onclick="switchGTab('notes','m')">📄 Notlar</button>
+            <div class="tab-line" id="gTabLine"></div>
+          </div>
+          <div class="gtab-panels">
+            <div id="gChatPanel" class="gpanel active">
+              <div class="chat-box" id="chatBox"></div>
+              <div class="chat-quick-row">
+                <div id="chatQuick" class="chat-quick"></div>
+                <button class="why-btn" onclick="showWhyMsg()">Neden özgürce mesaj yazamıyorum? ℹ️</button>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" id="chatInp" placeholder="Hızlı mesaj seçin..." class="chat-inp" readonly onfocus="showWhyMsg()">
+                <button class="btn-primary" style="padding:9px 16px;margin:0;flex-shrink:0" onclick="sendMsg('m')">Gönder</button>
+              </div>
+            </div>
+            <div id="gNotesPanel" class="gpanel">
+              <div id="groupNotes" style="flex:1;overflow-y:auto;padding:12px"></div>
+              <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,.05)">
+                <input type="file" id="grpFile" accept=".pdf" style="display:none" onchange="onGroupFile(event,'m')">
+                <button class="btn-primary" style="width:100%;font-size:12px;padding:10px;margin:0" onclick="document.getElementById('grpFile').click()">📎 PDF Not Paylaş</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JOIN PANEL (overlay) -->
+<div id="joinPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);z-index:1100;align-items:center;justify-content:center;padding:18px">
+  <div class="modal-box glass-modal" style="max-width:480px;position:relative">
+    <button onclick="closeJoin()" style="position:absolute;top:12px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;opacity:.4;color:var(--txt)">✕</button>
+    <h2 style="color:var(--accent);margin-bottom:5px;padding-right:32px" id="joinTitle"></h2>
+    <p style="font-size:12px;opacity:.5;margin-bottom:16px" id="joinSubtitle"></p>
+    <div class="glass-card" style="padding:14px;border-radius:12px;margin-bottom:18px" id="joinDetails"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-primary" style="flex:1;margin:0" id="joinOkBtn">Evet, Katıl</button>
+      <button class="btn-ghost" style="flex:1;margin:0" onclick="closeJoin()">Hayır</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER CARD -->
+<div id="memberCard" class="member-card glass-modal" style="display:none"></div>
+
+<!-- UNI COMING SOON OVERLAY -->
+<div id="uniOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:800;align-items:center;justify-content:center;padding:24px">
+  <div class="glass-modal" style="max-width:420px;width:100%;padding:36px;border-radius:24px;text-align:center;position:relative;animation:bxIn .4s var(--ease2)">
+    <button onclick="closeUniOverlay()" style="position:absolute;top:14px;right:18px;background:none;border:none;cursor:pointer;font-size:17px;opacity:.38;color:var(--txt)">✕</button>
+    <div style="font-size:52px;margin-bottom:14px">🎓</div>
+    <h2 style="color:var(--acc);font-size:20px;font-weight:800;margin-bottom:10px">Üniversite Notları</h2>
+    <p style="font-size:14px;opacity:.7;line-height:1.65">Üniversite ders notları çok yakında bilgi kaynağım sistemine dahil olacak. Mühendislik, tıp, hukuk ve daha pek çok bölüm için kapsamlı içerikler hazırlanmaktadır.</p>
+    <p style="font-size:12px;opacity:.42;margin-top:12px">Takipte kalın — yakında burada olacağız.</p>
+    <button class="btn-primary" style="margin-top:18px;padding:11px 28px" onclick="closeUniOverlay()">Anladım</button>
+  </div>
+</div>
+
+<!-- EMAIL LOGIN MODAL -->
+<div class="modal" id="emailLoginModal">
+  <div class="modal-box glass-modal" style="max-width:400px">
+    <button class="modal-x" onclick="closeModal('emailLoginModal')">✕</button>
+    <h2 class="modal-title">📧 E-posta ile Giriş</h2>
+    <p class="modal-sub" id="emailLoginSub">Hesabınız yoksa otomatik oluşturulur.</p>
+    <input type="email" id="emailInp" class="inp" placeholder="E-posta adresiniz" autocomplete="email">
+    <input type="password" id="passInp" class="inp" placeholder="Şifre (en az 6 karakter)" autocomplete="current-password">
+    <div id="emailLoginErr" style="color:#ef4444;font-size:12px;margin-bottom:8px;display:none"></div>
+    <div style="display:flex;gap:9px">
+      <button class="btn-primary" style="flex:1;margin:0" id="emailLoginBtn" onclick="submitEmailLogin()">Giriş Yap</button>
+      <button class="btn-ghost" style="flex:1;margin:0" id="emailRegisterBtn" onclick="submitEmailRegister()">Kayıt Ol</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:11px;opacity:.4">veya</div>
+    <button class="btn-ghost" style="width:100%;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="closeModal('emailLoginModal');loginWithGoogle()">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Google ile Devam Et
+    </button>
+  </div>
+</div>
+
+<!-- INVITE MODAL -->
+<div class="modal" id="inviteModal">
+  <div class="modal-box glass-modal" style="max-width:400px">
+    <button class="modal-x" onclick="closeModal('inviteModal')">✕</button>
+    <h2 class="modal-title">📨 Davet Gönder</h2>
+    <p class="modal-sub">Davet etmek istediğiniz kullanıcının adını girin.</p>
+    <input type="text" id="inviteNameInput" class="inp" placeholder="Kullanıcı Adı" onkeydown="if(event.key==='Enter')submitInvite()">
+    <div style="display:flex;gap:9px">
+      <button class="btn-primary" style="flex:1;margin:0" onclick="submitInvite()">Davet Gönder</button>
+      <button class="btn-ghost" style="flex:1;margin:0" onclick="closeModal('inviteModal')">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHY MSG OVERLAY -->
+<div id="whyMsgOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:2100;align-items:center;justify-content:center;padding:24px">
+  <div class="glass-modal" style="max-width:400px;width:100%;padding:28px;border-radius:20px;text-align:center;position:relative;animation:bxIn .35s var(--ease2)">
+    <button onclick="closeWhyMsg()" style="position:absolute;top:12px;right:14px;background:none;border:none;cursor:pointer;font-size:16px;opacity:.36;color:var(--txt)">✕</button>
+    <div style="font-size:36px;margin-bottom:12px">💬</div>
+    <h3 style="color:var(--acc);margin-bottom:10px">Mesajlaşma Hakkında</h3>
+    <p style="font-size:13.5px;opacity:.75;line-height:1.68">Bu platform bir sohbet uygulaması değil, bir çalışma ve not paylaşım ortamıdır. Odağı korumak ve içerik kalitesini yüksek tutmak adına yalnızca hazır mesajlar kullanılmaktadır.</p>
+    <p style="font-size:12px;opacity:.45;margin-top:10px">Serbest mesajlaşma özelliği için çalışmalarımız sürüyor.</p>
+    <button class="btn-primary" style="margin-top:16px;padding:10px 26px" onclick="closeWhyMsg()">Anladım</button>
+  </div>
+</div>
+
+<!-- Firebase v10 CDN (compat mode - works without bundler) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
