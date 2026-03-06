@@ -295,20 +295,54 @@ function confirm2(opts){
 
 // ── LOGIN ────────────────────────────
 function promptName(prov){g('loginProv').value=prov;closeModal('loginModal');openModal('nameModal');}
+// loginWithGoogle firebase.js'te tanımlı
 function finalizeLogin(){
   const nm=g('nameInput').value.trim();if(!nm){g('nameInput').focus();return;}
-  const prov=g('loginProv').value;
-  S.user.name=nm;S.user.isLoggedIn=true;S.user.provider=prov;
-  ['favorites','myNotes','countdowns','calendarEntries','recentViews','history'].forEach(k=>{if(!S.user[k])S.user[k]=[];});
-  if(S.user.xp===undefined)S.user.xp=0;
-  g('nameInput').value='';closeModal('nameModal');save();enterApp();
+  g('nameInput').value='';
+  // Firebase kullanıcısının adını güncelle
+  if(firebase&&firebase.auth&&firebase.auth().currentUser){
+    firebase.auth().currentUser.updateProfile({displayName:nm}).then(()=>{
+      if(typeof saveUserToFirestore==='function'){
+        saveUserToFirestore({name:nm});
+      }
+      if(S.user){S.user.name=nm;updateAvatar();updateDd();}
+    });
+  }
+  closeModal('nameModal');
+  if(S.user&&S.user.isLoggedIn)renderProfile();
 }
 
 // ── SESSION ─────────────────────────
 function loadSession(){
-  try{const raw=localStorage.getItem('bk_user_v4');if(raw){const u=JSON.parse(raw);if(u&&u.isLoggedIn){S.user={...DEFAULT_USER(),...u};const two=Date.now()-2*86400000;S.user.recentViews=(S.user.recentViews||[]).filter(v=>v.ts>two);enterApp();}}}catch(e){}
+  // Firebase onAuthStateChanged → onUserReady() ile yönetiliyor
+  // Hızlı başlangıç için localStorage cache'ini kullan
+  try{
+    const raw=localStorage.getItem('bk_user_v4');
+    if(raw){
+      const u=JSON.parse(raw);
+      if(u&&u.isLoggedIn){
+        S.user={...DEFAULT_USER(),...u};
+        const two=Date.now()-2*86400000;
+        S.user.recentViews=(S.user.recentViews||[]).filter(v=>v.ts>two);
+        enterApp();
+      }
+    }
+  }catch(e){}
 }
-function save(){try{localStorage.setItem('bk_user_v4',JSON.stringify(S.user));}catch(e){}}
+function save(){
+  // localStorage — hızlı cache
+  try{localStorage.setItem('bk_user_v4',JSON.stringify(S.user));}catch(e){}
+  // Firestore — kalıcı bulut kaydı (debounced)
+  if(window._saveTimer)clearTimeout(window._saveTimer);
+  window._saveTimer=setTimeout(()=>{
+    if(typeof saveUserToFirestore==='function'&&S.user&&S.user.isLoggedIn){
+      const {id,name,xp,level,comments,favorites,myNotes,countdowns,
+             calendarEntries,recentViews,activities,lastNameChange,isAdmin}=S.user;
+      saveUserToFirestore({name,xp,level,comments,favorites,myNotes,countdowns,
+        calendarEntries,recentViews,activities,lastNameChange,isAdmin});
+    }
+  },1200);
+}
 
 function enterApp(){
   g('landingPage').style.display='none';
@@ -324,6 +358,8 @@ function logout(){
   g('appPage').style.display='none';g('landingPage').style.display='flex';
   stopCanvas();setTheme(S.theme,true);
   if(motiveTimer){clearInterval(motiveTimer);motiveTimer=null;}
+  // Firebase çıkışı
+  if(typeof firebaseLogout==='function')firebaseLogout();
 }
 
 function updateAvatar(){const av=g('hdrAvatar'),dav=g('ddAvatar'),l=S.user.name.charAt(0).toUpperCase();if(av)av.textContent=l;if(dav)dav.textContent=l;}
@@ -775,7 +811,7 @@ function renderProfile(){
   const u=S.user;const li=lvlInfo(u.xp);
   const pc=g('profCircle');if(pc)pc.style.background='conic-gradient(var(--acc) '+li.pct+'%,rgba(128,128,128,.1) 0deg)';
   g('profLvlNum').textContent=li.lvl;g('profName').textContent=u.name;
-  g('profIdTxt').textContent='ID: '+u.id;
+  g('profIdTxt').textContent=(u.customerId||('BK-'+(u.id||'').slice(0,8).toUpperCase()));
   g('profProvTxt').textContent=u.provider==='google'?'🔵 Google ile giriş yapıldı':'🍎 Apple ile giriş yapıldı';
   g('xpLbl').textContent='Seviye '+li.lvl;g('xpCnt').textContent=u.xp+' XP / '+li.needed+' XP';
   g('xpFill').style.width=li.pct+'%';
@@ -815,7 +851,28 @@ function confirmChangeName(){
 
 // ── UPLOAD ─────────────────────────
 function onFileSelect(e){const f=e.target.files[0];if(f)g('fileText').textContent='📄 '+f.name+' ('+(f.size/1024).toFixed(0)+' KB)';}
-function submitUpload(){const t=g('upTitle').value.trim();if(!t){toast('⚠️ Başlık zorunludur.');return;}g('upTitle').value='';g('upDesc').value='';g('fileText').textContent='📄 PDF Dosyası Seç (veya buraya sürükleyin)';closeModal('uploadModal');addXP(2);toast('✅ Notunuz sisteme yüklendi!');}
+async function submitUpload(){
+  const t=g('upTitle').value.trim();if(!t){toast('⚠️ Başlık zorunludur.');return;}
+  const desc=g('upDesc')?.value.trim()||'';
+  const cat=g('upCat')?.value||'';
+  const fileInp=g('upFile');
+  const file=fileInp&&fileInp.files[0]?fileInp.files[0]:null;
+  toast('⏳ Not kaydediliyor...');
+  // PDF dosyası varsa adını metadata olarak kaydet (storage yok)
+  const pdfMeta=file?{name:file.name,size:file.size}:null;
+  if(typeof uploadNoteToFirestore==='function'){
+    await uploadNoteToFirestore({
+      title:t, description:desc, category:cat,
+      pdfMeta, hasPdf:!!file
+    });
+  }
+  g('upTitle').value='';
+  if(g('upDesc'))g('upDesc').value='';
+  if(g('fileText'))g('fileText').textContent='📄 PDF Dosyası Seç (veya buraya sürükleyin)';
+  if(fileInp)fileInp.value='';
+  closeModal('uploadModal');addXP(2);
+  toast('✅ Notunuz kaydedildi!');
+}
 
 // ── REPORT / MISC ──────────────────
 function cselPick(el,hidId,val){el.closest('.csel-grid').querySelectorAll('.csel').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');g(hidId).value=val;}
@@ -1026,6 +1083,49 @@ function switchGTab(tab){
   if(line){const active=tab==='chat'?t1:t2;line.style.left=active.offsetLeft+'px';line.style.width=active.offsetWidth+'px';}
 }
 function openGroupNewTab(){toast('ℹ️ Geniş görünüm için pencereyi büyütebilirsiniz.');}
+
+// ── FIREBASE CALLBACKS ──────────────────────
+// Firebase auth state → script.js'e köprü
+function onUserReady(profile) {
+  // Firestore profili S.user'a yükle
+  S.user = {
+    ...DEFAULT_USER(),
+    id:          profile.uid || profile.id || S.user.id,
+    name:        profile.name || 'Kullanıcı',
+    email:       profile.email || '',
+    xp:          profile.xp   || 0,
+    level:       profile.level|| 1,
+    comments:    profile.comments||0,
+    favorites:   profile.favorites||[],
+    myNotes:     profile.myNotes||[],
+    countdowns:  profile.countdowns||[],
+    calendarEntries: profile.calendarEntries||[],
+    recentViews: profile.recentViews||[],
+    activities:  profile.activities||[],
+    lastNameChange: profile.lastNameChange||null,
+    isAdmin:     profile.isAdmin||false,
+    isLoggedIn:  true,
+    provider:    profile.provider||'google',
+    customerId:  profile.customerId||('BK-'+(profile.uid||'').slice(0,8).toUpperCase()),
+  };
+  // Cache to localStorage
+  try{localStorage.setItem('bk_user_v4',JSON.stringify(S.user));}catch(e){}
+  // Eğer isim modal açıksa kapat
+  closeModal('nameModal');closeModal('loginModal');closeModal('emailLoginModal');
+  enterApp();
+}
+
+function handleSignOut() {
+  // Firebase onAuthStateChanged null geldi
+  S.user = DEFAULT_USER();
+  S.hasGroup = false; S.grpData = null;
+  try{localStorage.removeItem('bk_user_v4');}catch(e){}
+  const ap = g('appPage'), lp = g('landingPage');
+  if(ap) ap.style.display='none';
+  if(lp) lp.style.display='flex';
+  stopCanvas(); setTheme(S.theme, true);
+  if(motiveTimer){clearInterval(motiveTimer);motiveTimer=null;}
+}
 
 // ── INIT ────────────────────────────
 window.onload=()=>{
