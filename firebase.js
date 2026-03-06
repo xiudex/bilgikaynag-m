@@ -25,13 +25,22 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // ── AUTH STATE LISTENER ───────────────
+let _authReady = false; // İlk auth durumu geldi mi?
+
 auth.onAuthStateChanged(async (fbUser) => {
   if (fbUser) {
-    // Kullanıcı giriş yapmış — Firestore'dan profilini yükle
+    showLoginSpinner(true);
     await loadUserProfile(fbUser);
+    showLoginSpinner(false);
+    _authReady = true;
   } else {
-    // Çıkış yapıldı — landing page'e dön
-    if (typeof handleSignOut === 'function') handleSignOut();
+    // _authReady false ise sayfa ilk açılıyor — localStorage cache'i kullan
+    if (_authReady) {
+      // Gerçek çıkış
+      if (typeof handleSignOut === 'function') handleSignOut();
+    }
+    _authReady = true;
+    showLoginSpinner(false);
   }
 });
 
@@ -67,22 +76,27 @@ async function loadUserProfile(fbUser) {
       customerId: 'BK-' + fbUser.uid.slice(0, 8).toUpperCase()
     };
     await ref.set(newProfile);
-    if (typeof onUserReady === 'function') onUserReady(newProfile);
+    showLoginSpinner(false);
+  if (typeof onUserReady === 'function') onUserReady(newProfile);
   } else {
     const profile = snap.data();
+    showLoginSpinner(false);
     if (typeof onUserReady === 'function') onUserReady(profile);
   }
 }
 
 // ── AUTH FUNCTIONS ────────────────────
 async function loginWithGoogle() {
+  showLoginSpinner(true);
   try {
-    showAuthLoading(true);
     await auth.signInWithPopup(googleProvider);
-    // onAuthStateChanged tetiklenecek
+    // Başarılı → onAuthStateChanged → onUserReady → enterApp
+    // showLoginSpinner(false) onUserReady içinde çağrılacak
   } catch (err) {
-    showAuthLoading(false);
-    showAuthError(getAuthErrorMsg(err.code));
+    showLoginSpinner(false);
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showAuthError(getAuthErrorMsg(err.code));
+    }
   }
 }
 
@@ -282,9 +296,21 @@ function getAuthErrorMsg(code) {
 }
 
 // ── UI HELPERS ────────────────────────
-function showAuthLoading(show) {
-  const btn = document.querySelector('.social-btn.google');
-  if (btn) btn.textContent = show ? '⏳ Giriş yapılıyor...' : 'Google ile Devam Et';
+function showAuthLoading(show) { showLoginSpinner(show); }
+function showLoginSpinner(show) {
+  let sp = document.getElementById('loginSpinner');
+  if (show) {
+    if (!sp) {
+      sp = document.createElement('div');
+      sp.id = 'loginSpinner';
+      sp.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px';
+      sp.innerHTML = '<div style="width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top:3px solid #7ca8f8;border-radius:50%;animation:spin .8s linear infinite"></div><div style="color:#dde3ec;font-size:14px;font-weight:600;font-family:system-ui">Giriş yapılıyor...</div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+      document.body.appendChild(sp);
+    }
+    sp.style.display = 'flex';
+  } else {
+    if (sp) sp.style.display = 'none';
+  }
 }
 function showAuthError(msg) {
   if (typeof toast === 'function') toast('⚠️ ' + msg);
